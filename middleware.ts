@@ -50,8 +50,19 @@ export async function middleware(request: NextRequest) {
   // Redirect signed-in users away from auth pages
   if (user && (pathname === "/sign-in" || pathname === "/sign-up")) {
     const url = request.nextUrl.clone();
-    const adminEmails = (process.env.ADMIN_EMAILS || "").split(",").map(e => e.trim());
-    url.pathname = adminEmails.includes(user.email || "") ? "/admin" : "/dashboard";
+        // Check is_admin from DB profile, falling back to ADMIN_EMAILS env var
+        const adminEmails = (process.env.ADMIN_EMAILS || "").split(",").map(e => e.trim());
+        const isAdminByEmail = adminEmails.filter(Boolean).includes(user.email || "");
+        let isAdmin = isAdminByEmail;
+        if (!isAdmin) {
+                const { data: profile } = await supabase
+                  .from("profiles")
+                  .select("is_admin")
+                  .eq("id", user.id)
+                  .single();
+                isAdmin = profile?.is_admin === true;
+        }
+        url.pathname = isAdmin ? "/admin" : "/dashboard";
     return NextResponse.redirect(url);
   }
 
