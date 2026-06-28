@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
@@ -8,7 +8,7 @@ import { CheckCircle } from "lucide-react";
 
 type Plan = "per_deal" | "subscription";
 
-export default function SignUpPage() {
+function SignUpForm() {
   const params = useSearchParams();
   const initialPlan = (params.get("plan") as Plan) || "per_deal";
 
@@ -153,5 +153,13 @@ export default function SignUpPage() {
         </p>
       </div>
     </div>
+  );
+}
+
+export default function SignUpPage() {
+  return (
+    <Suspense fallback={<div className="w-full max-w-md"><div className="card p-8 text-center text-slate-400">Loading…</div></div>}>
+      <SignUpForm />
+    </Suspense>
   );
 }
