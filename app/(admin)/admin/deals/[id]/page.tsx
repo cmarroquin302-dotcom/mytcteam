@@ -6,6 +6,7 @@ import { AdminDealActions } from "@/components/admin/deal-actions";
 import { AdminChecklist } from "@/components/admin/checklist";
 import { NotesEditor } from "@/components/admin/notes-editor";
 import { ChecklistLink } from "@/components/admin/checklist-link";
+import { DealSpreadsheetTab } from "@/components/admin/deal-spreadsheet-tab";
 import { TabNav } from "@/components/deal/tab-nav";
 import { DocumentsTab } from "@/components/deal/documents-tab";
 import { ContactsTab } from "@/components/deal/contacts-tab";
@@ -19,12 +20,13 @@ import type { DealMessage } from "@/components/deal/messages-tab";
 import { Suspense } from "react";
 
 const ADMIN_TABS = [
-  { key: "checklist",  label: "Checklist" },
-  { key: "documents",  label: "Documents" },
-  { key: "contacts",   label: "Contacts" },
-  { key: "dates",      label: "Key Dates" },
-  { key: "messages",   label: "Messages" },
-  { key: "notes",      label: "Notes" },
+  { key: "checklist",    label: "Checklist" },
+  { key: "spreadsheet",  label: "Spreadsheet" },
+  { key: "documents",    label: "Documents" },
+  { key: "contacts",     label: "Contacts" },
+  { key: "dates",        label: "Key Dates" },
+  { key: "messages",     label: "Messages" },
+  { key: "notes",        label: "Notes" },
 ];
 
 export default async function AdminDealDetailPage({
@@ -98,6 +100,9 @@ export default async function AdminDealDetailPage({
 
           {tab === "checklist" && (
             <AdminChecklist dealId={deal.id} items={items || []} currentStage={deal.stage} />
+          )}
+          {tab === "spreadsheet" && (
+            <DealSpreadsheetTab dealId={deal.id} initialUrl={deal.checklist_url ?? null} />
           )}
           {tab === "documents" && (
             <DocumentsTab dealId={deal.id} documents={documents || []} isAdmin={true} />
@@ -184,11 +189,11 @@ export default async function AdminDealDetailPage({
           </div>
 
           {/* Checklist link */}
-                    <ChecklistLink
-                                  dealId={deal.id}
-                                  initialUrl={deal.checklist_url ?? null}
-                                  initialNotes={deal.checklist_notes ?? null}
-                                />
+          <ChecklistLink
+            dealId={deal.id}
+            initialUrl={deal.checklist_url ?? null}
+            initialNotes={deal.checklist_notes ?? null}
+          />
 
           {/* Quick stats */}
           <div className="card p-4 grid grid-cols-3 gap-3 text-center">
