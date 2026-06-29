@@ -3,18 +3,19 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  LayoutDashboard, Users, FileText, CalendarDays, Settings, LogOut, ShieldCheck
+  LayoutDashboard, Users, FileText, CalendarDays, Settings, LogOut, ShieldCheck, TableProperties
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 
 const navLinks = [
-  { href: "/admin",          label: "Overview",  icon: LayoutDashboard },
-  { href: "/admin/clients",  label: "Clients",   icon: Users },
-  { href: "/admin/deals",    label: "All Deals", icon: FileText },
-  { href: "/admin/calendar", label: "Deadlines", icon: CalendarDays },
-  { href: "/admin/settings", label: "Settings",  icon: Settings },
+  { href: "/admin",               label: "Overview",    icon: LayoutDashboard },
+  { href: "/admin/clients",       label: "Clients",     icon: Users },
+  { href: "/admin/deals",         label: "All Deals",   icon: FileText },
+  { href: "/admin/calendar",      label: "Deadlines",   icon: CalendarDays },
+  { href: "/admin/spreadsheet",   label: "Spreadsheet", icon: TableProperties },
+  { href: "/admin/settings",      label: "Settings",    icon: Settings },
 ];
 
 export function AdminNav() {
