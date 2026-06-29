@@ -63,6 +63,8 @@ export interface Deal {
   closing_fee_paid: boolean;
   fallen_through_reason: string | null;
   internal_notes: string | null;      // admin only
+    checklist_url: string | null;       // link to Google Sheet / checklist
+    checklist_notes: string | null;     // brief checklist notes
   is_archived: boolean;
   created_at: string;
   updated_at: string;
