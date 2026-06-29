@@ -5,6 +5,7 @@ import { formatDate, formatCurrency } from "@/lib/utils";
 import { AdminDealActions } from "@/components/admin/deal-actions";
 import { AdminChecklist } from "@/components/admin/checklist";
 import { NotesEditor } from "@/components/admin/notes-editor";
+import { ChecklistLink } from "@/components/admin/checklist-link";
 import { TabNav } from "@/components/deal/tab-nav";
 import { DocumentsTab } from "@/components/deal/documents-tab";
 import { ContactsTab } from "@/components/deal/contacts-tab";
@@ -181,6 +182,13 @@ export default async function AdminDealDetailPage({
               </div>
             )}
           </div>
+
+          {/* Checklist link */}
+                    <ChecklistLink
+                                  dealId={deal.id}
+                                  initialUrl={deal.checklist_url ?? null}
+                                  initialNotes={deal.checklist_notes ?? null}
+                                />
 
           {/* Quick stats */}
           <div className="card p-4 grid grid-cols-3 gap-3 text-center">
