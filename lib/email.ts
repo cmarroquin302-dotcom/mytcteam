@@ -1,6 +1,8 @@
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const resend = process.env.RESEND_API_KEY
+  ? new Resend(process.env.RESEND_API_KEY)
+  : null;
 
 const FROM = "myTCteam <notifications@mytcteam.com>";
 const REPLY_TO = process.env.ADMIN_EMAIL || "support@mytcteam.com";
@@ -84,6 +86,7 @@ export async function sendNewMessageEmail({
     <p style="font-size:13px;color:#94a3b8;">You're receiving this because you have an active deal on myTCteam.</p>
   `;
 
+  if (!resend) return null;
   return resend.emails.send({
     from: FROM,
     replyTo: REPLY_TO,
@@ -123,6 +126,7 @@ export async function sendDocumentUploadedEmail({
     <p style="font-size:13px;color:#94a3b8;">You're receiving this because you have an active deal on myTCteam.</p>
   `;
 
+  if (!resend) return null;
   return resend.emails.send({
     from: FROM,
     replyTo: REPLY_TO,
@@ -171,6 +175,7 @@ export async function sendDealStageChangedEmail({
     <p style="font-size:13px;color:#94a3b8;">You're receiving this because you have an active deal on myTCteam.</p>
   `;
 
+  if (!resend) return null;
   return resend.emails.send({
     from: FROM,
     replyTo: REPLY_TO,
@@ -223,6 +228,7 @@ export async function sendDeadlineReminderEmail({
     <p style="font-size:13px;color:#94a3b8;">Daily deadline reminders from myTCteam.</p>
   `;
 
+  if (!resend) return null;
   return resend.emails.send({
     from: FROM,
     replyTo: REPLY_TO,
