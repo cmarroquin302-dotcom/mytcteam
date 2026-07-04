@@ -43,6 +43,7 @@ export function DealSpreadsheetTab({ dealId, initialUrl }: Props) {
 
   return (
     <div className="flex flex-col" style={{ minHeight: "600px" }}>
+      {/* URL bar */}
       <div className="card p-4 mb-4">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
@@ -57,19 +58,35 @@ export function DealSpreadsheetTab({ dealId, initialUrl }: Props) {
             )}
             {!editing && url && (
               <>
-                <a href={url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-xs text-slate-500 hover:text-slate-700">
+                <a
+                  href={url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1 text-xs text-slate-500 hover:text-slate-700"
+                >
                   <ExternalLink size={13} /> Open
                 </a>
-                <button onClick={() => setEditing(true)} className="text-xs text-blue-600 hover:text-blue-800 font-medium">
+                <button
+                  onClick={() => setEditing(true)}
+                  className="text-xs text-blue-600 hover:text-blue-800 font-medium"
+                >
                   Change
                 </button>
               </>
             )}
           </div>
         </div>
+
         {editing ? (
           <div className="space-y-2">
-            <input type="url" value={url} onChange={e => setUrl(e.target.value)} placeholder="https://docs.google.com/spreadsheets/d/…/edit" className="input w-full font-mono text-sm" autoFocus />
+            <input
+              type="url"
+              value={url}
+              onChange={e => setUrl(e.target.value)}
+              placeholder="https://docs.google.com/spreadsheets/d/…/edit"
+              className="input w-full font-mono text-sm"
+              autoFocus
+            />
             <div className="flex items-start gap-2 text-xs text-slate-400">
               <Info size={12} className="mt-0.5 flex-shrink-0" />
               <span>Go to File → Share → Publish to web in Google Sheets so it embeds without sign-in.</span>
@@ -79,7 +96,10 @@ export function DealSpreadsheetTab({ dealId, initialUrl }: Props) {
                 {saving ? "Saving…" : "Save & embed"}
               </button>
               {url && (
-                <button onClick={() => setEditing(false)} className="text-xs text-slate-500 hover:text-slate-700 px-2 py-1.5">
+                <button
+                  onClick={() => setEditing(false)}
+                  className="text-xs text-slate-500 hover:text-slate-700 px-2 py-1.5"
+                >
                   Cancel
                 </button>
               )}
@@ -89,14 +109,24 @@ export function DealSpreadsheetTab({ dealId, initialUrl }: Props) {
           <p className="text-xs text-slate-500 font-mono truncate">{url}</p>
         ) : null}
       </div>
+
+      {/* Embedded sheet */}
       <div className="flex-1 bg-slate-100 rounded-xl overflow-hidden" style={{ minHeight: "500px" }}>
         {embedUrl ? (
-          <iframe src={embedUrl} className="w-full h-full border-0" style={{ minHeight: "500px" }} allowFullScreen title="TC Checklist Sheet" />
+          <iframe
+            src={embedUrl}
+            className="w-full h-full border-0"
+            style={{ minHeight: "500px" }}
+            allowFullScreen
+            title="TC Checklist Sheet"
+          />
         ) : (
           <div className="flex flex-col items-center justify-center h-full gap-3 py-24">
             <TableProperties size={40} className="text-slate-300" />
             <p className="text-slate-500 font-medium text-sm">No sheet linked yet</p>
-            <p className="text-slate-400 text-xs max-w-xs text-center">Paste your Google Sheets URL above and click <strong>Save &amp; embed</strong>.</p>
+            <p className="text-slate-400 text-xs max-w-xs text-center">
+              Paste your Google Sheets URL above and click <strong>Save &amp; embed</strong>.
+            </p>
           </div>
         )}
       </div>

@@ -4,7 +4,7 @@ import { useState, useTransition } from "react";
 import { createClient } from "@/lib/supabase/client";
 
 interface Props {
-    dealId: string;
+  dealId: string;
   initialUrl: string | null;
   initialNotes: string | null;
 }
@@ -26,27 +26,27 @@ export function ChecklistLink({ dealId, initialUrl, initialNotes }: Props) {
       setSaved(true);
       setEditing(false);
       setTimeout(() => setSaved(false), 2500);
-});
-}
+    });
+  }
 
   return (
     <div className="card p-4">
       <div className="flex items-center justify-between mb-3">
         <h3 className="font-semibold text-slate-900 text-sm">Checklist / Files</h3>
-{!editing && (
+        {!editing && (
           <button
             onClick={() => setEditing(true)}
             className="text-xs text-blue-600 hover:text-blue-800 font-medium"
           >
-{url ? "Edit" : "+ Add link"}
+            {url ? "Edit" : "+ Add link"}
           </button>
         )}
-{saved && (
+        {saved && (
           <span className="text-xs text-green-600 font-medium">Saved ✓</span>
         )}
       </div>
 
-{editing ? (
+      {editing ? (
         <div className="space-y-2">
           <div>
             <label className="text-xs text-slate-500 mb-1 block">Google Sheet / Drive URL</label>
@@ -74,7 +74,7 @@ export function ChecklistLink({ dealId, initialUrl, initialNotes }: Props) {
               disabled={isPending}
               className="btn-primary text-xs px-3 py-1.5"
             >
-{isPending ? "Saving…" : "Save"}
+              {isPending ? "Saving…" : "Save"}
             </button>
             <button
               onClick={() => { setEditing(false); setUrl(initialUrl || ""); setNotes(initialNotes || ""); }}
@@ -97,7 +97,7 @@ export function ChecklistLink({ dealId, initialUrl, initialNotes }: Props) {
             </svg>
             Open Checklist Sheet
           </a>
-{notes && (
+          {notes && (
             <p className="text-xs text-slate-500">{notes}</p>
           )}
         </div>

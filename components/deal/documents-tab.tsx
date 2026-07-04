@@ -97,6 +97,14 @@ export function DocumentsTab({
       admin_only: isAdmin ? adminOnly : false,
     });
 
+    // Fire-and-forget email notification (only when admin uploads; clients uploading
+    // are also fine to notify, route handles both cases)
+    fetch("/api/notify/document", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ dealId, documentName: file.name }),
+    }).catch(() => {});
+
     setUploading(false);
     if (fileRef.current) fileRef.current.value = "";
     router.refresh();

@@ -8,7 +8,7 @@ import type { Profile, Payment } from "@/types";
 export default async function BillingPage({
   searchParams,
 }: {
-  searchParams: Promise<{ setup?: string }>;
+  searchParams: Promise<{ setup?: string; success?: string; canceled?: string; no_customer?: string; stripe_missing?: string }>;
 }) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -31,6 +31,7 @@ export default async function BillingPage({
   const needsSubscriptionSetup = params.setup === "subscription";
   const paymentSuccess = params.success === "1";
   const paymentCanceled = params.canceled === "1";
+  const portalError = params.no_customer === "1" || params.stripe_missing === "1";
   const isSubscription = profile?.plan === "subscription";
   const dealsUsed = profile?.deals_used_this_month || 0;
   const dealsCap = profile?.deals_cap || 10;
@@ -46,6 +47,17 @@ export default async function BillingPage({
           <div>
             <p className="font-semibold text-green-900">Subscription activated!</p>
             <p className="text-green-700 text-sm mt-0.5">Your $500/month plan is now active. You can open up to 10 deals per month.</p>
+          </div>
+        </div>
+      )}
+
+      {/* Portal error */}
+      {portalError && (
+        <div className="mb-6 card p-4 border-red-200 bg-red-50 flex items-start gap-3">
+          <AlertCircle size={18} className="text-red-600 flex-shrink-0 mt-0.5" />
+          <div>
+            <p className="font-semibold text-red-900">Could not open billing portal</p>
+            <p className="text-red-700 text-sm mt-0.5">Please contact support if this keeps happening.</p>
           </div>
         </div>
       )}
@@ -122,6 +134,15 @@ export default async function BillingPage({
                 Monthly cap reached. <Link href="/contact?reason=high_volume" className="underline">Contact us</Link> for a high-volume plan.
               </p>
             )}
+          </div>
+        )}
+
+        {isSubscription && profile?.stripe_customer_id && (
+          <div className="mt-4 pt-4 border-t border-slate-100">
+            <a href="/api/billing/portal" className="btn-secondary text-sm inline-flex items-center gap-1.5">
+              <CreditCard size={14} />
+              Manage subscription
+            </a>
           </div>
         )}
 

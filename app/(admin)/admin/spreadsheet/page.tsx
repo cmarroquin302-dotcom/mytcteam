@@ -8,7 +8,9 @@ function toEmbedUrl(raw: string): string {
   if (!raw) return "";
   try {
     const url = new URL(raw);
+    // Already a pubhtml embed
     if (url.pathname.includes("/pubhtml")) return raw;
+    // Extract spreadsheet ID
     const match = url.pathname.match(/\/spreadsheets\/d\/([^/]+)/);
     if (!match) return raw;
     const id = match[1];
@@ -57,6 +59,7 @@ export default function AdminSpreadsheetPage() {
 
   return (
     <div className="flex flex-col h-screen">
+      {/* Header + config */}
       <div className="p-6 border-b border-slate-200 bg-white">
         <div className="flex items-center gap-2 mb-4">
           <TableProperties size={22} className="text-slate-600" />
@@ -99,10 +102,12 @@ export default function AdminSpreadsheetPage() {
           <Info size={13} className="mt-0.5 flex-shrink-0" />
           <span>
             For the embed to work, open your Google Sheet → <strong>File → Share → Publish to web</strong> → publish, then paste the regular edit URL here.
+            Alternatively, make sure the sheet is shared as <strong>"Anyone with the link can view."</strong>
           </span>
         </div>
       </div>
 
+      {/* Embedded sheet */}
       <div className="flex-1 bg-slate-100 p-4">
         {loadingData ? (
           <div className="flex items-center justify-center h-full text-slate-400 text-sm">Loading…</div>

@@ -60,6 +60,12 @@ export function MessagesTab({ dealId, initialMessages, currentUserId, currentUse
     await supabase.from("deal_messages").insert({ deal_id: dealId, sender_id: currentUserId, body: text });
     setBody("");
     setSending(false);
+    // Fire-and-forget email notification
+    fetch("/api/notify/message", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ dealId, messagePreview: text }),
+    }).catch(() => {});
   }
 
   function handleKey(e: React.KeyboardEvent<HTMLTextAreaElement>) {

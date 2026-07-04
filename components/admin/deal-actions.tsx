@@ -14,10 +14,19 @@ export function AdminDealActions({ deal }: { deal: Deal }) {
   const [reason, setReason] = useState("");
   const router = useRouter();
 
+  async function notifyStage(newStage: string, note?: string) {
+    fetch("/api/notify/stage", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ dealId: deal.id, newStage, note }),
+    }).catch(() => {});
+  }
+
   async function updateStage(stage: DealStage) {
     setLoading(true);
     const supabase = createClient();
     await supabase.from("deals").update({ stage, updated_at: new Date().toISOString() }).eq("id", deal.id);
+    notifyStage(stage);
     router.refresh();
     setLoading(false);
   }
@@ -31,6 +40,7 @@ export function AdminDealActions({ deal }: { deal: Deal }) {
       fallen_through_reason: reason,
       updated_at: new Date().toISOString(),
     }).eq("id", deal.id);
+    notifyStage("fallen_through", reason);
     setShowFallenModal(false);
     router.refresh();
     setLoading(false);
