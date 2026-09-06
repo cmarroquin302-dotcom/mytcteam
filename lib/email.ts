@@ -4,8 +4,8 @@ const resend = process.env.RESEND_API_KEY
   ? new Resend(process.env.RESEND_API_KEY)
   : null;
 
-const FROM = "myTCteam <notifications@mytcteam.com>";
-const REPLY_TO = process.env.ADMIN_EMAIL || "support@mytcteam.com";
+const FROM = "myTCteam <notifications@mytcteam.online>";
+const REPLY_TO = process.env.ADMIN_EMAIL || "support@mytcteam.online";
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://mytcteam.vercel.app";
 
 // ─── Shared layout ────────────────────────────────────────────────────────────
@@ -44,7 +44,7 @@ function emailLayout(title: string, body: string) {
     </div>
     <div class="footer">
       myTCteam · Real Estate Transaction Coordination<br/>
-      <a href="${BASE_URL}" style="color:#94a3b8;">mytcteam.com</a>
+      <a href="${BASE_URL}" style="color:#94a3b8;">mytcteam.online</a>
     </div>
   </div>
 </body>
