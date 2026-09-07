@@ -39,6 +39,7 @@ export default function AdminNewDealPage() {
       contract_date:   fd.get("contract_date") || null,
       closing_date:    fd.get("closing_date") || null,
       stage:           fd.get("stage") || "intake",
+      assigned_tc:     fd.get("assigned_tc") || null,
       retainer_paid:   fd.get("retainer_paid") === "true",
       internal_notes:  fd.get("internal_notes") || null,
     }).select().single();
@@ -135,6 +136,11 @@ export default function AdminNewDealPage() {
         <div className="card p-5">
           <h2 className="font-semibold text-slate-900 mb-4">Admin</h2>
           <div className="space-y-4">
+            <div>
+              <label className="label">Assign Transaction Manager <span className="text-red-500">*</span></label>
+              <input name="assigned_tc" className="input" placeholder="TC's full name…" required />
+              <p className="text-xs text-slate-400 mt-1">The TC responsible for this deal. Shown to the client in their portal.</p>
+            </div>
             <div>
               <label className="label">Initial stage</label>
               <select name="stage" className="input">
