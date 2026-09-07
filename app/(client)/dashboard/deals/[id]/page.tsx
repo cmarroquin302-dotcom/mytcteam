@@ -138,6 +138,19 @@ export default async function ClientDealDetailPage({
             </div>
           )}
 
+          {/* Assigned TC banner */}
+          {deal.assigned_tc && (
+            <div className="mb-4 rounded-xl bg-brand-50 border border-brand-100 px-4 py-3 flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-brand-600 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                {deal.assigned_tc.split(" ").map((n: string) => n[0]).join("").slice(0, 2).toUpperCase()}
+              </div>
+              <div>
+                <div className="text-xs text-brand-500 font-medium">Your Transaction Manager</div>
+                <div className="text-sm font-semibold text-brand-900">{deal.assigned_tc}</div>
+              </div>
+            </div>
+          )}
+
           <div className="grid md:grid-cols-2 gap-4">
             {/* Deal details */}
             <div className="card p-4">
