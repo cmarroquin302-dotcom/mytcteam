@@ -1,7 +1,7 @@
-// ─── Plans ───────────────────────────────────────────────────────────────────
+// âââ Plans ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 export type Plan = "per_deal" | "subscription" | "high_volume";
 
-// ─── Deal stages ─────────────────────────────────────────────────────────────
+// âââ Deal stages âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 export type DealStage =
   | "intake"
   | "active_tracking"
@@ -27,7 +27,7 @@ export const DEAL_STAGE_ORDER: DealStage[] = [
   "closed",
 ];
 
-// ─── Profile ─────────────────────────────────────────────────────────────────
+// âââ Profile âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 export interface Profile {
   id: string;                       // matches auth.users.id
   email: string;
@@ -44,7 +44,7 @@ export interface Profile {
   created_at: string;
 }
 
-// ─── Deal ─────────────────────────────────────────────────────────────────────
+// âââ Deal âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 export interface Deal {
   id: string;
   client_id: string;
@@ -65,6 +65,7 @@ export interface Deal {
   internal_notes: string | null;      // admin only
   checklist_url: string | null;       // link to Google Sheet / checklist
   checklist_notes: string | null;     // brief checklist notes
+  assigned_tc: string | null;         // name of the assigned transaction manager
   is_archived: boolean;
   created_at: string;
   updated_at: string;
@@ -73,21 +74,21 @@ export interface Deal {
   checklist_items?: ChecklistItem[];
 }
 
-// ─── Checklist item ──────────────────────────────────────────────────────────
+// âââ Checklist item ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 export interface ChecklistItem {
   id: string;
   deal_id: string;
   stage: DealStage;
   label: string;
   completed: boolean;
-  due_date: string | null;           // ISO date — feeds deadline calendar
+  due_date: string | null;           // ISO date â feeds deadline calendar
   completed_at: string | null;
   admin_only: boolean;               // hidden from client view
   sort_order: number;
   created_at: string;
 }
 
-// ─── Payment ──────────────────────────────────────────────────────────────────
+// âââ Payment ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 export interface Payment {
   id: string;
   client_id: string;
@@ -102,7 +103,7 @@ export interface Payment {
   created_at: string;
 }
 
-// ─── Settings ─────────────────────────────────────────────────────────────────
+// âââ Settings âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 export interface AppSettings {
   id: string;
   key: string;
@@ -110,7 +111,7 @@ export interface AppSettings {
   updated_at: string;
 }
 
-// ─── Notification ─────────────────────────────────────────────────────────────
+// âââ Notification âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 export interface Notification {
   id: string;
   client_id: string;
@@ -123,7 +124,7 @@ export interface Notification {
   created_at: string;
 }
 
-// ─── View helpers ──────────────────────────────────────────────────────────────
+// âââ View helpers ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 export interface DeadlineItem {
   deal_id: string;
   deal_address: string;
