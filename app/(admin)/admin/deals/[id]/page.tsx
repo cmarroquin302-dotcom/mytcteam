@@ -136,6 +136,16 @@ export default async function AdminDealDetailPage({
 
         {/* Right sidebar */}
         <div className="space-y-4">
+          {/* Assigned TC */}
+          <div className="card p-4">
+            <h3 className="font-semibold text-slate-900 text-sm mb-1">Transaction Manager</h3>
+            {deal.assigned_tc ? (
+              <p className="text-sm text-brand-700 font-medium">{deal.assigned_tc}</p>
+            ) : (
+              <p className="text-sm text-amber-600 font-medium">⚠ No TC assigned yet</p>
+            )}
+          </div>
+
           {/* Deal details */}
           <div className="card p-4">
             <h3 className="font-semibold text-slate-900 text-sm mb-3">Deal details</h3>
