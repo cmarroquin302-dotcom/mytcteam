@@ -28,8 +28,8 @@ export function PublicNav() {
               fontFamily="Arial Black, Arial, sans-serif" fontSize="24" fontWeight="900" fill="#ffffff">T</text>
             <text x="62" y="40" textAnchor="middle" dominantBaseline="central"
               fontFamily="Arial Black, Arial, sans-serif" fontSize="24" fontWeight="900" fill="#ffffff">C</text>
-            <text x="104" y="34" textAnchor="start" dominantBaseline="central"
-              fontFamily="Arial Black, Arial, sans-serif" fontSize="30" fontWeight="900" fill="#1e1b4b" letterSpacing="-1">my<tspan fill="#3730a3">TC</tspan>team</text>
+            <text x="104" y="40" textAnchor="start" dominantBaseline="central"
+              fontFamily="Arial Black, Arial, sans-serif" fontSize="30" fontWeight="900" letterSpacing="-1"><tspan fill="#1e1b4b">my</tspan><tspan fill="#3730a3">TC</tspan><tspan fill="#1e1b4b">team</tspan></text>
             <text x="106" y="60" textAnchor="start" dominantBaseline="central"
               fontFamily="Arial, sans-serif" fontSize="10" fill="#94a3b8" letterSpacing="3">TRANSACTION COORDINATION</text>
           </svg>
