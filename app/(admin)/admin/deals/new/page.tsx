@@ -20,7 +20,6 @@ interface ExtractedFields {
 export default function AdminNewDealPage() {
   const router = useRouter();
   const [clients, setClients] = useState<Profile[]>([]);
-  const [admins, setAdmins] = useState<Profile[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -49,27 +48,29 @@ export default function AdminNewDealPage() {
     async function loadData() {
       const supabase = createClient();
 
-      // Load clients (non-admin users)
+      // Load clients — include users where is_admin is false OR null
       const { data: clientData } = await supabase
         .from("profiles")
         .select("*")
-        .eq("is_admin", false)
+        .or("is_admin.is.null,is_admin.eq.false")
         .order("full_name");
       setClients(clientData || []);
 
-      // Load admin users for TC dropdown
-      const { data: adminData } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("is_admin", true)
-        .order("full_name");
-      setAdmins(adminData || []);
-
-      // Auto-assign to the currently logged-in admin
+      // Pre-fill TC with the logged-in user's own name
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
-        const me = adminData?.find(a => a.id === user.id);
-        if (me?.full_name) setAssignedTc(me.full_name);
+        const { data: myProfile } = await supabase
+          .from("profiles")
+          .select("full_name, email")
+          .eq("id", user.id)
+          .single();
+        if (myProfile?.full_name) {
+          setAssignedTc(myProfile.full_name);
+        } else if (myProfile?.email) {
+          setAssignedTc(myProfile.email);
+        } else if (user.email) {
+          setAssignedTc(user.email);
+        }
       }
     }
     loadData();
@@ -151,7 +152,7 @@ export default function AdminNewDealPage() {
         <div className="mb-4 rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">{error}</div>
       )}
 
-      {/* Smart Fill (collapsed by default) */}
+      {/* ── Smart Fill (collapsed by default) ── */}
       <div className="mb-5 rounded-xl border border-brand-200 bg-brand-50 overflow-hidden">
         <button
           type="button"
@@ -203,6 +204,7 @@ export default function AdminNewDealPage() {
         )}
       </div>
 
+      {/* ── Deal Form ── */}
       <form onSubmit={handleSubmit} className="space-y-5">
 
         <div className="card p-5">
@@ -221,6 +223,42 @@ export default function AdminNewDealPage() {
               </option>
             ))}
           </select>
+        </div>
+
+        <div className="card p-5">
+          <h2 className="font-semibold text-slate-900 mb-4">Admin</h2>
+          <div className="space-y-4">
+            <div>
+              <label className="label">Transaction Coordinator (TC) <span className="text-red-500">*</span></label>
+              <input
+                required
+                value={assignedTc}
+                onChange={e => setAssignedTc(e.target.value)}
+                className="input"
+                placeholder="Your name…"
+              />
+              <p className="text-xs text-slate-400 mt-1">Pre-filled with your name. Shown to the client in their portal.</p>
+            </div>
+            <div>
+              <label className="label">Initial stage</label>
+              <select value={stage} onChange={e => setStage(e.target.value)} className="input">
+                <option value="intake">Intake</option>
+                <option value="active_tracking">Active Tracking</option>
+                <option value="pre_closing">Pre-Closing</option>
+                <option value="closing">Closing</option>
+              </select>
+            </div>
+            <div>
+              <label className="flex items-center gap-2 text-sm font-medium text-slate-700 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={retainerPaid}
+                  onChange={e => setRetainerPaid(e.target.checked)}
+                />
+                Retainer already paid
+              </label>
+            </div>
+          </div>
         </div>
 
         <div className="card p-5">
@@ -297,55 +335,15 @@ export default function AdminNewDealPage() {
         </div>
 
         <div className="card p-5">
-          <h2 className="font-semibold text-slate-900 mb-4">Admin</h2>
-          <div className="space-y-4">
-            <div>
-              <label className="label">Transaction Manager <span className="text-red-500">*</span></label>
-              <select
-                required
-                value={assignedTc}
-                onChange={e => setAssignedTc(e.target.value)}
-                className="input"
-              >
-                <option value="">Select a TC…</option>
-                {admins.map(a => (
-                  <option key={a.id} value={a.full_name || a.email}>
-                    {a.full_name || a.email}
-                  </option>
-                ))}
-              </select>
-              <p className="text-xs text-slate-400 mt-1">Shown to the client in their portal.</p>
-            </div>
-            <div>
-              <label className="label">Initial stage</label>
-              <select value={stage} onChange={e => setStage(e.target.value)} className="input">
-                <option value="intake">Intake</option>
-                <option value="active_tracking">Active Tracking</option>
-                <option value="pre_closing">Pre-Closing</option>
-                <option value="closing">Closing</option>
-              </select>
-            </div>
-            <div>
-              <label className="flex items-center gap-2 text-sm font-medium text-slate-700 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={retainerPaid}
-                  onChange={e => setRetainerPaid(e.target.checked)}
-                />
-                Retainer already paid
-              </label>
-            </div>
-            <div>
-              <label className="label">Internal notes</label>
-              <textarea
-                rows={3}
-                value={internalNotes}
-                onChange={e => setInternalNotes(e.target.value)}
-                className="input resize-none"
-                placeholder="Notes visible only in admin…"
-              />
-            </div>
-          </div>
+          <h2 className="font-semibold text-slate-900 mb-4">Notes</h2>
+          <label className="label">Internal notes</label>
+          <textarea
+            rows={3}
+            value={internalNotes}
+            onChange={e => setInternalNotes(e.target.value)}
+            className="input resize-none"
+            placeholder="Notes visible only in admin…"
+          />
         </div>
 
         <div className="flex gap-3">
