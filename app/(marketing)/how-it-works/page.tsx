@@ -12,7 +12,7 @@ const phases = [
     items: [
       "You submit the executed contract and key property/party details through your client portal.",
       "We open the file and charge the retainer (per-deal clients) or count the deal against your monthly cap (subscribers).",
-      "We send a personalized welcome communication to all parties â buyers, sellers, escrow, lender, and co-op agent â introducing ourselves and setting expectations.",
+      "We send a personalized welcome communication to all parties — buyers, sellers, escrow, lender, and co-op agent — introducing ourselves and setting expectations.",
       "We log all key dates: earnest money deadline, inspection period, appraisal, financing contingency, and the target closing date.",
     ],
   },
@@ -40,7 +40,7 @@ const phases = [
       "Once all contingencies are cleared, we confirm in writing with all parties.",
       "We review the closing disclosure for accuracy and flag discrepancies.",
       "We coordinate final walkthrough scheduling between agents.",
-      "We confirm closing date, time, and location with all parties â lender, escrow, both agents â so closing day has no surprises.",
+      "We confirm closing date, time, and location with all parties — lender, escrow, both agents — so closing day has no surprises.",
     ],
   },
   {
@@ -58,8 +58,8 @@ const phases = [
 
 const faqs = [
   {
-    q: "Who is my transaction manager?",
-    a: "When you open your first deal, you're assigned a dedicated myTCteam Transaction Manager. You'll see their name in your client portal and they'll introduce themselves when your file is opened. They're your single point of contact for every deal you run with us.",
+    q: "Who is my transaction coordinator?",
+    a: "When you open your first deal, you're assigned a dedicated myTCteam Transaction Coordinator. You'll see their name in your client portal and they'll introduce themselves when your file is opened. They're your single point of contact for every deal you run with us.",
   },
   {
     q: "Do I need to be present for any of this?",
@@ -67,15 +67,15 @@ const faqs = [
   },
   {
     q: "What if the deal falls through?",
-    a: "We flag the file as 'Fallen Through,' log the reason, and archive it. The $75 retainer is non-refundable as we've already opened and worked the file. No closing balance is owed.",
+    a: "Real estate doesn't always go as planned — and we understand that better than anyone. If a transaction doesn't make it to the finish line, we take care of closing the file properly: logging what happened, communicating with all parties, and archiving everything so your records stay clean and complete. The retainer covers the coordination work already completed on your behalf, and no closing balance is owed. Whenever you're ready to open a new file, we'll be right here.",
   },
   {
     q: "Can I see what's happening on my deal at any time?",
-    a: "Yes. Your client portal shows the current stage, the checklist of completed and outstanding items, key dates, and your payment history.",
+    a: "Yes — that's exactly what the client portal is for. You can view your deal's current stage, a live checklist of completed and outstanding items, key dates, documents, contacts, and your payment history. You'll also receive notifications when something changes on your file, and you can message your TC directly through the portal without picking up the phone or digging through email.",
   },
   {
     q: "Do you provide legal advice or fill in contract terms?",
-    a: "No. We coordinate the administrative process â deadlines, documents, and communication. We don't draft contracts, advise on negotiations, or provide legal counsel.",
+    a: "No. We coordinate the administrative process — deadlines, documents, and communication. We don't draft contracts, advise on negotiations, or provide legal counsel.",
   },
   {
     q: "What markets do you work in?",
@@ -91,8 +91,7 @@ export default function HowItWorksPage() {
         <div className="max-w-3xl mx-auto text-center">
           <h1 className="text-4xl font-bold text-slate-900 mb-4">How myTCteam works</h1>
           <p className="text-lg text-slate-500">
-            From the moment your contract is executed to the day it closes, here's what we do â
-            written for agents, not compliance officers.
+            From the moment your contract is executed to the day it closes, here&apos;s what we do &mdash; written for agents, not compliance officers.
           </p>
         </div>
       </section>
@@ -107,16 +106,12 @@ export default function HowItWorksPage() {
           </div>
           <div>
             <div className="text-xs font-semibold text-brand-400 uppercase tracking-wide mb-2">Your team, your deal</div>
-            <h2 className="text-2xl font-bold mb-3">You get a dedicated transaction manager</h2>
+            <h2 className="text-2xl font-bold mb-3">You get a dedicated transaction coordinator</h2>
             <p className="text-brand-200 leading-relaxed mb-4">
-              When you create your account and open your first deal, you're assigned a dedicated myTCteam
-              Transaction Manager. This is your person â they own your file from contract to close,
-              know your deal inside and out, and are accountable for every deadline and communication.
+              When you open your first deal, you&apos;re assigned a dedicated myTCteam Transaction Coordinator. This is your person &mdash; they own your file from contract to close, know your deal inside and out, and are on top of every deadline and communication so you don&apos;t have to be.
             </p>
             <p className="text-brand-200 leading-relaxed">
-              You're not passed around between staff. Your TC builds familiarity with how you work,
-              your preferred communication style, and your clients. Over time, they become an extension
-              of your business â not just a service you hired.
+              You&apos;re never passed around between staff. Your TC learns how you work, your communication preferences, and your clients. Over time, they become a true extension of your business &mdash; organized, efficient, and always one step ahead.
             </p>
           </div>
         </div>
@@ -160,10 +155,7 @@ export default function HowItWorksPage() {
           <div>
             <h3 className="font-bold text-slate-900 mb-2">If the deal falls through</h3>
             <p className="text-slate-600 text-sm leading-relaxed">
-              Real estate is unpredictable. If a transaction falls apart â at any stage â we flag the file
-              as "Fallen Through," log the reason, and archive it with complete documentation. The $75 retainer
-              is kept (we've done real work), and no closing balance is owed. You can come back and open a new
-              file when you're ready to try again.
+              Real estate doesn&apos;t always go as planned &mdash; and we understand that better than anyone. If a transaction doesn&apos;t make it to the finish line, we take care of closing the file properly: logging what happened, communicating with all parties, and archiving everything so your records stay clean and complete. The retainer covers the coordination work already completed on your behalf, and no closing balance is owed. Whenever you&apos;re ready to open a new file, we&apos;ll be right here.
             </p>
           </div>
         </div>
