@@ -4,8 +4,17 @@
  * Finds checklist items and closing dates due within 3 days and emails the admin.
  */
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@supabase/supabase-js";
 import { sendDeadlineReminderEmail } from "@/lib/email";
+
+// Use service role so queries bypass RLS — this route has no user session
+function adminClient() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    { auth: { autoRefreshToken: false, persistSession: false } }
+  );
+}
 
 export const dynamic = "force-dynamic";
 
@@ -21,7 +30,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "ADMIN_EMAIL not configured" }, { status: 500 });
   }
 
-  const supabase = await createClient();
+  const supabase = adminClient();
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
