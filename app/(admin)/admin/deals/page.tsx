@@ -99,6 +99,7 @@ export default async function AdminDealsPage({
               <tr className="border-b border-slate-100 bg-slate-50 text-left">
                 <th className="px-4 py-3 font-semibold text-slate-600 text-xs uppercase tracking-wide">Property</th>
                 <th className="px-4 py-3 font-semibold text-slate-600 text-xs uppercase tracking-wide hidden sm:table-cell">Client</th>
+                <th className="px-4 py-3 font-semibold text-slate-600 text-xs uppercase tracking-wide hidden md:table-cell">TC</th>
                 <th className="px-4 py-3 font-semibold text-slate-600 text-xs uppercase tracking-wide">Stage</th>
                 <th className="px-4 py-3 font-semibold text-slate-600 text-xs uppercase tracking-wide hidden md:table-cell">Close date</th>
                 <th className="px-4 py-3 font-semibold text-slate-600 text-xs uppercase tracking-wide hidden lg:table-cell">Retainer</th>
@@ -121,6 +122,13 @@ export default async function AdminDealsPage({
                   <td className="px-4 py-3 hidden sm:table-cell">
                     <div className="text-slate-700">{deal.profiles?.full_name || "—"}</div>
                     <div className="text-xs text-slate-400">{deal.profiles?.company_name}</div>
+                  </td>
+                  <td className="px-4 py-3 hidden md:table-cell">
+                    {deal.assigned_tc ? (
+                      <span className="text-sm text-slate-700">{deal.assigned_tc}</span>
+                    ) : (
+                      <span className="text-xs text-amber-600 font-medium">Unassigned</span>
+                    )}
                   </td>
                   <td className="px-4 py-3">
                     <StageBadge stage={deal.stage} />
