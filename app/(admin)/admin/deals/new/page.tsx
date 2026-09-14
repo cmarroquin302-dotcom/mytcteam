@@ -20,6 +20,7 @@ interface ExtractedFields {
 export default function AdminNewDealPage() {
   const router = useRouter();
   const [clients, setClients] = useState<Profile[]>([]);
+  const [admins, setAdmins] = useState<Profile[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -56,21 +57,19 @@ export default function AdminNewDealPage() {
         .order("full_name");
       setClients(clientData || []);
 
-      // Pre-fill TC with the logged-in user's own name
+      // Load admin users for TC dropdown
+      const { data: adminData } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("is_admin", true)
+        .order("full_name");
+      setAdmins(adminData || []);
+
+      // Auto-assign to the currently logged-in admin
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
-        const { data: myProfile } = await supabase
-          .from("profiles")
-          .select("full_name, email")
-          .eq("id", user.id)
-          .single();
-        if (myProfile?.full_name) {
-          setAssignedTc(myProfile.full_name);
-        } else if (myProfile?.email) {
-          setAssignedTc(myProfile.email);
-        } else if (user.email) {
-          setAssignedTc(user.email);
-        }
+        const me = adminData?.find(a => a.id === user.id);
+        if (me?.full_name) setAssignedTc(me.full_name);
       }
     }
     loadData();
@@ -207,6 +206,7 @@ export default function AdminNewDealPage() {
       {/* ── Deal Form ── */}
       <form onSubmit={handleSubmit} className="space-y-5">
 
+        {/* Client */}
         <div className="card p-5">
           <h2 className="font-semibold text-slate-900 mb-4">Client</h2>
           <label className="label">Assign to client <span className="text-red-500">*</span></label>
@@ -225,19 +225,26 @@ export default function AdminNewDealPage() {
           </select>
         </div>
 
+        {/* Admin — TC + stage up top so you set ownership before filling details */}
         <div className="card p-5">
           <h2 className="font-semibold text-slate-900 mb-4">Admin</h2>
           <div className="space-y-4">
             <div>
               <label className="label">Transaction Coordinator (TC) <span className="text-red-500">*</span></label>
-              <input
+              <select
                 required
                 value={assignedTc}
                 onChange={e => setAssignedTc(e.target.value)}
                 className="input"
-                placeholder="Your name…"
-              />
-              <p className="text-xs text-slate-400 mt-1">Pre-filled with your name. Shown to the client in their portal.</p>
+              >
+                <option value="">Select a TC…</option>
+                {admins.map(a => (
+                  <option key={a.id} value={a.full_name || a.email}>
+                    {a.full_name || a.email}
+                  </option>
+                ))}
+              </select>
+              <p className="text-xs text-slate-400 mt-1">Shown to the client in their portal. Auto-set to you.</p>
             </div>
             <div>
               <label className="label">Initial stage</label>
@@ -261,6 +268,7 @@ export default function AdminNewDealPage() {
           </div>
         </div>
 
+        {/* Property */}
         <div className="card p-5">
           <h2 className="font-semibold text-slate-900 mb-4">Property</h2>
           <div className="space-y-4">
@@ -308,6 +316,7 @@ export default function AdminNewDealPage() {
           </div>
         </div>
 
+        {/* Parties */}
         <div className="card p-5">
           <h2 className="font-semibold text-slate-900 mb-4">Parties</h2>
           <div className="space-y-4">
@@ -334,6 +343,7 @@ export default function AdminNewDealPage() {
           </div>
         </div>
 
+        {/* Internal notes */}
         <div className="card p-5">
           <h2 className="font-semibold text-slate-900 mb-4">Notes</h2>
           <label className="label">Internal notes</label>
