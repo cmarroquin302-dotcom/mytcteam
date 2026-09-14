@@ -7,6 +7,7 @@ import { AdminChecklist } from "@/components/admin/checklist";
 import { NotesEditor } from "@/components/admin/notes-editor";
 import { ChecklistLink } from "@/components/admin/checklist-link";
 import { TcEditor } from "@/components/admin/tc-editor";
+import { DealSmartFill } from "@/components/admin/deal-smart-fill";
 import { DealSpreadsheetTab } from "@/components/admin/deal-spreadsheet-tab";
 import { TabNav } from "@/components/deal/tab-nav";
 import { DocumentsTab } from "@/components/deal/documents-tab";
@@ -91,6 +92,8 @@ export default async function AdminDealDetailPage({
         </div>
         <AdminDealActions deal={deal} />
       </div>
+
+      <DealSmartFill dealId={deal.id} />
 
       <div className="grid lg:grid-cols-3 gap-6">
         {/* Main content (tabs) */}
