@@ -1,6 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
+import { createClient } from "@/lib/supabase/server";
 
 export async function POST(req: NextRequest) {
+  // Auth gate — prevent unauthenticated API credit abuse
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
   const { text } = await req.json();
 
   if (!text || text.trim().length < 10) {
@@ -20,7 +26,7 @@ Return ONLY a valid JSON object with exactly these keys (use null for any value 
   "property_address": "full street address including city, state, zip if present",
   "buyer_name": "buyer's full name(s)",
   "seller_name": "seller's full name(s)",
-  "contract_price": 450000,
+  "contract_price": 450000 (number, no $ or commas),
   "contract_date": "YYYY-MM-DD",
   "closing_date": "YYYY-MM-DD",
   "escrow_officer": "escrow officer or title company name",
@@ -58,6 +64,7 @@ Return ONLY the JSON object, no explanation:`;
   try {
     const jsonMatch = raw.match(/\{[\s\S]*\}/);
     const fields = jsonMatch ? JSON.parse(jsonMatch[0]) : {};
+    // Filter out null values for count
     const extracted = Object.entries(fields).filter(([, v]) => v !== null).length;
     return NextResponse.json({ fields, extracted });
   } catch {
