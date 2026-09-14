@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { CheckCircle, Clock, FileCheck, Users, ArrowRight, Shield, Calendar, Star } from "lucide-react";
+import { CheckCircle, Clock, FileCheck, Users, ArrowRight, Shield, Calendar, Star, Bell, LayoutDashboard, MessageSquare } from "lucide-react";
 import { PublicNav } from "@/components/layout/public-nav";
 import { Footer } from "@/components/layout/footer";
 
@@ -7,29 +7,36 @@ const features = [
   {
     icon: FileCheck,
     title: "Contract to Close, Handled",
-    desc: "We manage every document, deadline, and communication your deal requires — from the moment contracts are signed to the day it closes.",
+    desc: "Every document, deadline, and task from executed contract to closing day is managed by your dedicated TC. You hand it off and stay focused on your clients.",
   },
   {
     icon: Clock,
-    title: "Nothing Falls Through the Cracks",
-    desc: "Inspection periods, appraisal deadlines, title contingencies — we track every date and remind everyone who needs to know.",
+    title: "No More Chasing",
+    desc: "We track every contingency, deadline, and outstanding item and follow up with all parties on your behalf. No more phone tag, no more wondering where things stand.",
   },
   {
     icon: Users,
-    title: "Communication Hub",
-    desc: "We coordinate between agents, lenders, escrow, and title so you're not playing phone tag across six parties.",
+    title: "One Point of Contact",
+    desc: "Your TC coordinates between agents, lenders, escrow, and title so everything flows through one organized channel. You get updates, not chaos.",
   },
   {
     icon: Shield,
-    title: "Your Deals, Documented",
-    desc: "Every interaction, upload, and status change is logged. You always have a clear paper trail.",
+    title: "Fully Documented",
+    desc: "Every interaction, upload, and status change is logged and stored. Your file is clean, organized, and audit-ready from day one.",
   },
 ];
 
+const portalFeatures = [
+  { icon: LayoutDashboard, label: "Live deal status", desc: "See exactly where your deal stands at every stage." },
+  { icon: CheckCircle, label: "Checklist progress", desc: "Every completed and outstanding item, always up to date." },
+  { icon: Bell, label: "Instant notifications", desc: "Get alerted the moment something changes on your file." },
+  { icon: MessageSquare, label: "Direct messaging", desc: "Message your TC directly through the portal, no email chains." },
+];
+
 const steps = [
-  { n: "01", title: "Open a file", desc: "Submit the contract details and key dates. We handle onboarding all parties." },
-  { n: "02", title: "We track everything", desc: "Deadlines, contingencies, repairs, financing — all monitored and communicated." },
-  { n: "03", title: "You close the deal", desc: "We prep all parties for closing day and confirm every detail is in place." },
+  { n: "01", title: "Open a file", desc: "Submit your contract details. We handle onboarding all parties and getting the file organized." },
+  { n: "02", title: "We run it", desc: "Deadlines, contingencies, repairs, financing &mdash; all monitored, communicated, and followed up on." },
+  { n: "03", title: "You close", desc: "We prep all parties for closing day. You show up, sign, and collect your commission." },
 ];
 
 export default function HomePage() {
@@ -41,14 +48,13 @@ export default function HomePage() {
       <section className="bg-gradient-to-b from-brand-950 to-brand-900 text-white py-24 px-4">
         <div className="max-w-4xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 bg-white/10 text-brand-200 text-sm font-medium px-4 py-1.5 rounded-full mb-6">
-            <Star size={13} fill="currentColor" /> Trusted by agents & brokerage teams
+            <Star size={13} fill="currentColor" /> Trusted by agents &amp; brokerage teams
           </div>
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight mb-6 leading-tight">
-            Transaction coordination<br className="hidden sm:block" /> that actually works
+            The TC team built<br className="hidden sm:block" /> for how you actually work
           </h1>
           <p className="text-lg sm:text-xl text-brand-200 max-w-2xl mx-auto mb-10">
-            We handle the paperwork, deadlines, and coordination from contract to close —
-            so you can focus on what you do best: selling real estate.
+            Efficient. Organized. Zero chasing. We plug into your workflow and handle every detail from contract to close so you can keep your pipeline moving.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link href="/sign-up" className="btn-primary px-8 py-3 text-base shadow-lg shadow-brand-900/50">
@@ -76,10 +82,10 @@ export default function HomePage() {
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-14">
             <h2 className="text-3xl font-bold text-slate-900 mb-3">
-              Your deals deserve more than a spreadsheet
+              More volume. Less work. No chaos.
             </h2>
             <p className="text-slate-500 max-w-xl mx-auto">
-              Every transaction has dozens of moving pieces. We make sure none of them slip.
+              We handle the backend of every transaction so you can stay in front of clients and keep producing.
             </p>
           </div>
           <div className="grid sm:grid-cols-2 gap-6">
@@ -92,6 +98,33 @@ export default function HomePage() {
                 <p className="text-slate-500 text-sm leading-relaxed">{desc}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Client Portal */}
+      <section className="py-20 px-4 bg-brand-950 text-white">
+        <div className="max-w-5xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <div className="text-xs font-semibold text-brand-400 uppercase tracking-wide mb-3">Your client portal</div>
+              <h2 className="text-3xl font-bold mb-4">Always know where your deal stands</h2>
+              <p className="text-brand-200 leading-relaxed mb-6">
+                Every deal you run with us comes with a dedicated portal where you can track your file in real time &mdash; no need to call or email asking for updates. Everything is organized, visible, and current.
+              </p>
+              <p className="text-brand-200 leading-relaxed">
+                Get notified the moment something changes. Message your TC directly. See every completed item and what&apos;s still outstanding. Your file is always one click away.
+              </p>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              {portalFeatures.map(({ icon: Icon, label, desc }) => (
+                <div key={label} className="bg-white/5 border border-white/10 rounded-xl p-4">
+                  <Icon size={20} className="text-brand-400 mb-3" />
+                  <div className="font-semibold text-white text-sm mb-1">{label}</div>
+                  <div className="text-brand-300 text-xs leading-relaxed">{desc}</div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -110,7 +143,7 @@ export default function HomePage() {
                   {n}
                 </div>
                 <h3 className="font-semibold text-slate-900 mb-2">{title}</h3>
-                <p className="text-slate-500 text-sm">{desc}</p>
+                <p className="text-slate-500 text-sm" dangerouslySetInnerHTML={{ __html: desc }} />
               </div>
             ))}
           </div>
@@ -139,7 +172,7 @@ export default function HomePage() {
             </div>
           </div>
           <p className="text-center text-slate-400 text-sm mt-6">
-            Running more than 10 deals/month? <Link href="/contact" className="text-brand-600 hover:underline">Talk to us →</Link>
+            Running more than 10 deals/month? <Link href="/contact" className="text-brand-600 hover:underline">Talk to us &rarr;</Link>
           </p>
         </div>
       </section>
@@ -148,10 +181,10 @@ export default function HomePage() {
       <section className="py-16 px-4 bg-brand-600">
         <div className="max-w-2xl mx-auto text-center text-white">
           <Calendar size={32} className="mx-auto mb-4 opacity-80" />
-          <h2 className="text-3xl font-bold mb-3">Ready to close more deals with less stress?</h2>
+          <h2 className="text-3xl font-bold mb-3">Ready to close more with less on your plate?</h2>
           <p className="text-brand-200 mb-8">Create your account and open your first file today.</p>
           <Link href="/sign-up" className="inline-flex items-center gap-2 bg-white text-brand-700 font-semibold px-8 py-3 rounded-lg hover:bg-brand-50 transition-colors shadow-lg">
-            Get started free <ArrowRight size={16} />
+            Get started <ArrowRight size={16} />
           </Link>
         </div>
       </section>
