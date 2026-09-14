@@ -6,6 +6,7 @@ import { AdminDealActions } from "@/components/admin/deal-actions";
 import { AdminChecklist } from "@/components/admin/checklist";
 import { NotesEditor } from "@/components/admin/notes-editor";
 import { ChecklistLink } from "@/components/admin/checklist-link";
+import { TcEditor } from "@/components/admin/tc-editor";
 import { DealSpreadsheetTab } from "@/components/admin/deal-spreadsheet-tab";
 import { TabNav } from "@/components/deal/tab-nav";
 import { DocumentsTab } from "@/components/deal/documents-tab";
@@ -136,14 +137,10 @@ export default async function AdminDealDetailPage({
 
         {/* Right sidebar */}
         <div className="space-y-4">
-          {/* Assigned TC */}
+          {/* Assigned TC — editable */}
           <div className="card p-4">
-            <h3 className="font-semibold text-slate-900 text-sm mb-1">Transaction Manager</h3>
-            {deal.assigned_tc ? (
-              <p className="text-sm text-brand-700 font-medium">{deal.assigned_tc}</p>
-            ) : (
-              <p className="text-sm text-amber-600 font-medium">⚠ No TC assigned yet</p>
-            )}
+            <h3 className="font-semibold text-slate-900 text-sm mb-2">Transaction Coordinator</h3>
+            <TcEditor dealId={deal.id} currentTc={deal.assigned_tc ?? null} />
           </div>
 
           {/* Deal details */}
