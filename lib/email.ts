@@ -4,8 +4,8 @@ const resend = process.env.RESEND_API_KEY
   ? new Resend(process.env.RESEND_API_KEY)
   : null;
 
-const FROM = "myTCteam <notifications@mytcteam.online>";
-const REPLY_TO = process.env.ADMIN_EMAIL || "support@mytcteam.online";
+const FROM = "myTCteam <info@mytcteam.online>";
+const REPLY_TO = process.env.ADMIN_EMAIL || "info@mytcteam.online";
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://mytcteam.vercel.app";
 
 // --- Shared layout ---
@@ -277,4 +277,45 @@ export async function sendDeadlineReminderEmail({
     subject: `${deadlines.length} deadline${deadlines.length !== 1 ? "s" : ""} coming up`,
     html: emailLayout("Upcoming deadlines", body),
   });
+}
+
+export async function sendSalesInquiryEmail({
+    name,
+    email,
+    phone,
+    volume,
+    message,
+}: {
+    name: string;
+    email: string;
+    phone: string;
+    volume: string;
+    message: string;
+}) {
+    const adminEmail = process.env.ADMIN_EMAIL;
+    if (!resend || !adminEmail) return null;
+
+    const body = `
+        <h2>New sales inquiry</h2>
+            <p>Someone filled out the contact form on the pricing page.</p>
+                <div class="detail-box">
+                      <strong>${name}</strong><br/>
+                            <a href="mailto:${email}" style="color:#6366f1;">${email}</a><br/>
+                                  ${phone ? `Phone: ${phone}<br/>` : ""}
+                                        Annual deal volume: <strong>${volume}</strong>
+                                            </div>
+                                                <div class="detail-box">
+                                                      <span style="color:#64748b;font-size:13px;">${message}</span>
+                                                          </div>
+                                                              <div class="divider"></div>
+                                                                  <p style="font-size:13px;color:#94a3b8;">Sent from the pricing page contact form.</p>
+                                                                    `;
+
+    return resend.emails.send({
+          from: FROM,
+          replyTo: email,
+          to: adminEmail,
+          subject: `Sales inquiry from ${name} (${volume}/yr)`,
+          html: emailLayout("New sales inquiry", body),
+    });
 }
