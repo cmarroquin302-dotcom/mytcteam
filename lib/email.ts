@@ -8,7 +8,7 @@ const FROM = "myTCteam <notifications@mytcteam.online>";
 const REPLY_TO = process.env.ADMIN_EMAIL || "support@mytcteam.online";
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://mytcteam.vercel.app";
 
-// ─── Shared layout ────────────────────────────────────────────────────────────
+// --- Shared layout ---
 
 function emailLayout(title: string, body: string) {
   return `<!DOCTYPE html>
@@ -51,7 +51,48 @@ function emailLayout(title: string, body: string) {
 </html>`;
 }
 
-// ─── Email senders ─────────────────────────────────────────────────────────────
+// --- Email senders ---
+
+export async function sendSalesInquiryEmail({
+  name,
+  email,
+  phone,
+  volume,
+  message,
+}: {
+  name: string;
+  email: string;
+  phone: string;
+  volume: string;
+  message: string;
+}) {
+  const adminEmail = process.env.ADMIN_EMAIL;
+  if (!resend || !adminEmail) return null;
+
+  const body = `
+    <h2>New sales inquiry</h2>
+    <p>Someone filled out the contact form on the pricing page.</p>
+    <div class="detail-box">
+      <strong>${name}</strong><br/>
+      <a href="mailto:${email}" style="color:#6366f1;">${email}</a><br/>
+      ${phone ? `Phone: ${phone}<br/>` : ""}
+      Annual deal volume: <strong>${volume}</strong>
+    </div>
+    <div class="detail-box">
+      <span style="color:#64748b;font-size:13px;">${message}</span>
+    </div>
+    <div class="divider"></div>
+    <p style="font-size:13px;color:#94a3b8;">Sent from the pricing page contact form.</p>
+  `;
+
+  return resend.emails.send({
+    from: FROM,
+    replyTo: email,
+    to: adminEmail,
+    subject: `Sales inquiry from ${name} (${volume}/yr)`,
+    html: emailLayout("New sales inquiry", body),
+  });
+}
 
 export async function sendNewMessageEmail({
   to,
@@ -79,7 +120,7 @@ export async function sendNewMessageEmail({
     <p>Hi ${toName}, you have a new message regarding your transaction.</p>
     <div class="detail-box">
       <strong>${propertyAddress}</strong><br/>
-      <span style="color:#64748b;">${messagePreview.slice(0, 200)}${messagePreview.length > 200 ? "…" : ""}</span>
+      <span style="color:#64748b;">${messagePreview.slice(0, 200)}${messagePreview.length > 200 ? "..." : ""}</span>
     </div>
     <a href="${dealUrl}" class="btn">View Message</a>
     <div class="divider"></div>
@@ -118,7 +159,7 @@ export async function sendDocumentUploadedEmail({
     <p>Hi ${toName}, a new document has been added to your transaction.</p>
     <div class="detail-box">
       <strong>${propertyAddress}</strong><br/>
-      📄 ${documentName}<br/>
+      ${documentName}<br/>
       <span style="color:#64748b;font-size:13px;">Uploaded by ${uploadedBy}</span>
     </div>
     <a href="${dealUrl}" class="btn">View Documents</a>
@@ -154,16 +195,16 @@ export async function sendDealStageChangedEmail({
   const dealUrl = `${BASE_URL}/dashboard/deals/${dealId}`;
 
   const stageLabels: Record<string, { label: string; emoji: string }> = {
-    pending:        { label: "Pending",         emoji: "🕐" },
-    active:         { label: "Active",           emoji: "✅" },
-    closing:        { label: "Closing",          emoji: "🏁" },
-    closed:         { label: "Closed",           emoji: "🎉" },
-    fallen_through: { label: "Fallen Through",   emoji: "❌" },
+    pending:        { label: "Pending",         emoji: "Clock" },
+    active:         { label: "Active",           emoji: "Check" },
+    closing:        { label: "Closing",          emoji: "Flag" },
+    closed:         { label: "Closed",           emoji: "Star" },
+    fallen_through: { label: "Fallen Through",   emoji: "X" },
   };
-  const { label, emoji } = stageLabels[newStage] || { label: newStage, emoji: "📋" };
+  const { label, emoji } = stageLabels[newStage] || { label: newStage, emoji: "Doc" };
 
   const body = `
-    <h2>${emoji} Transaction status update</h2>
+    <h2>Transaction status update</h2>
     <p>Hi ${toName}, your transaction status has been updated.</p>
     <div class="detail-box">
       <strong>${propertyAddress}</strong><br/>
@@ -180,7 +221,7 @@ export async function sendDealStageChangedEmail({
     from: FROM,
     replyTo: REPLY_TO,
     to,
-    subject: `${emoji} Transaction update: ${propertyAddress}`,
+    subject: `Transaction update: ${propertyAddress}`,
     html: emailLayout("Transaction update", body),
   });
 }
@@ -211,7 +252,7 @@ export async function sendDeadlineReminderEmail({
   `).join("");
 
   const body = `
-    <h2>⏰ Upcoming deadlines</h2>
+    <h2>Upcoming deadlines</h2>
     <p>You have ${deadlines.length} deadline${deadlines.length !== 1 ? "s" : ""} coming up in the next 3 days.</p>
     <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;border:1px solid #e2e8f0;border-radius:8px;overflow:hidden;margin-bottom:16px;">
       <thead>
@@ -233,7 +274,7 @@ export async function sendDeadlineReminderEmail({
     from: FROM,
     replyTo: REPLY_TO,
     to,
-    subject: `⏰ ${deadlines.length} deadline${deadlines.length !== 1 ? "s" : ""} coming up`,
+    subject: `${deadlines.length} deadline${deadlines.length !== 1 ? "s" : ""} coming up`,
     html: emailLayout("Upcoming deadlines", body),
   });
 }
