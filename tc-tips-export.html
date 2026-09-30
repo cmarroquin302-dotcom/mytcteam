@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>TC Tips — Export Slides</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+  body { background: #f1f5f9; font-family: -apple-system, Helvetica, Arial, sans-serif; margin: 0; padding: 32px; }
+  h2 { color: #0f172a; margin-bottom: 6px; }
+  p { color: #64748b; font-size: 14px; margin-bottom: 24px; }
+  .btn { display: inline-block; background: #0f172a; color: #fff; font-weight: 700; font-size: 14px; padding: 14px 28px; border-radius: 10px; cursor: pointer; border: none; margin-bottom: 32px; }
+  .btn:hover { background: #1e293b; }
+  .status { font-size: 13px; color: #6366f1; font-weight: 600; margin-bottom: 24px; display: none; }
+  .grid { display: grid; grid-template-columns: repeat(3, 480px); gap: 20px; }
+  .slide-wrap { position: relative; }
+  .slide-label { font-size: 11px; font-weight: 600; color: #94a3b8; margin-bottom: 6px; letter-spacing: 1px; text-transform: uppercase; }
+  .dl-btn { display: block; margin-top: 8px; background: #6366f1; color: #fff; font-size: 12px; font-weight: 700; padding: 8px 0; border-radius: 7px; border: none; cursor: pointer; width: 480px; }
+  .dl-btn:hover { background: #4f46e5; }
+
+  /* ===== SLIDE STYLES ===== */
+  .slide { width: 480px; height: 480px; display: flex; flex-direction: column; background: #fff; border: 1px solid #e2e8f0; overflow: hidden; position: relative; }
+  .accentbar { height: 4px; background: linear-gradient(90deg, #6366f1, #3730a3); flex-shrink: 0; }
+  .topbar { padding: 16px 28px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #f1f5f9; flex-shrink: 0; }
+  .brand { display: flex; align-items: center; }
+  .lc1 { width: 18px; height: 18px; border-radius: 50%; background: #6366f1; display: flex; align-items: center; justify-content: center; font-size: 7px; font-weight: 900; color: #fff; }
+  .lc2 { width: 18px; height: 18px; border-radius: 50%; background: #3730a3; display: flex; align-items: center; justify-content: center; font-size: 7px; font-weight: 900; color: #fff; margin-left: -6px; }
+  .brandname { font-size: 11px; font-weight: 700; color: #94a3b8; margin-left: 8px; }
+  .ct { font-size: 11px; color: #cbd5e1; font-weight: 500; }
+  .body-area { flex: 1; padding: 28px 36px; display: flex; flex-direction: column; justify-content: center; position: relative; overflow: hidden; }
+  .ghostnum { position: absolute; bottom: -10px; right: 16px; font-size: 110px; font-weight: 900; color: #f8fafc; line-height: 1; letter-spacing: -6px; user-select: none; }
+  .tiptag { font-size: 10px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #6366f1; margin-bottom: 12px; }
+  .tiphl { font-size: 22px; font-weight: 800; color: #0f172a; line-height: 1.3; margin-bottom: 14px; }
+  .divider { width: 30px; height: 3px; background: #6366f1; border-radius: 2px; margin-bottom: 16px; }
+  .tipbody { font-size: 13px; color: #64748b; line-height: 1.75; }
+  .bottombar { padding: 13px 28px; border-top: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+  .bottomtag { font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: #cbd5e1; }
+</style>
+</head>
+<body>
+<h2>myTCteam — TC Tips Carousel</h2>
+<p>Click "Download All" to save all 7 slides as PNG images, or download individually below.</p>
+<button class="btn" onclick="downloadAll()">Download All 7 Slides</button>
+<div class="status" id="status">Generating images...</div>
+
+<div class="grid" id="slides-grid">
+
+  <!-- Slide 1: Cover -->
+  <div class="slide-wrap">
+    <div class="slide-label">Slide 1 — Cover</div>
+    <div class="slide" id="slide-1">
+      <div class="accentbar"></div>
+      <div class="topbar">
+        <div class="brand"><div class="lc1">T</div><div class="lc2">C</div><div class="brandname">myTCteam</div></div>
+        <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#cbd5e1;font-weight:600">Transaction Tips</div>
+      </div>
+      <div class="body-area" style="justify-content:flex-end;padding-bottom:36px">
+        <div class="tiptag">5-part series</div>
+        <div class="tiphl" style="font-size:28px">5 things that slow down every closing.</div>
+        <div style="font-size:13px;color:#94a3b8;line-height:1.65;margin-top:4px">And what to do about each one. Save this for your next transaction.</div>
+      </div>
+    </div>
+    <button class="dl-btn" onclick="downloadSlide('slide-1','mytcteam-tip-01-cover')">Download Slide 1</button>
+  </div>
+
+  <!-- Slide 2 -->
+  <div class="slide-wrap">
+    <div class="slide-label">Slide 2 — Tip 01</div>
+    <div class="slide" id="slide-2">
+      <div class="topbar">
+        <div class="brand"><div class="lc1">T</div><div class="lc2">C</div><div class="brandname">myTCteam</div></div>
+        <div class="ct">1 of 5</div>
+      </div>
+      <div class="body-area">
+        <div class="ghostnum">01</div>
+        <div class="tiptag">Tip 01</div>
+        <div class="tiphl">Log every deadline the day you get the contract.</div>
+        <div class="divider"></div>
+        <div class="tipbody">Do not rely on memory. Inspection period, EMD, appraisal, financing contingency, closing date -- log them all immediately, with alerts 48 hours before each one. One missed deadline can kill a deal.</div>
+      </div>
+      <div class="bottombar"><div class="bottomtag">Transaction Coordination</div></div>
+    </div>
+    <button class="dl-btn" onclick="downloadSlide('slide-2','mytcteam-tip-02-deadlines')">Download Slide 2</button>
+  </div>
+
+  <!-- Slide 3 -->
+  <div class="slide-wrap">
+    <div class="slide-label">Slide 3 — Tip 02</div>
+    <div class="slide" id="slide-3">
+      <div class="topbar">
+        <div class="brand"><div class="lc1">T</div><div class="lc2">C</div><div class="brandname">myTCteam</div></div>
+        <div class="ct">2 of 5</div>
+      </div>
+      <div class="body-area">
+        <div class="ghostnum">02</div>
+        <div class="tiptag">Tip 02</div>
+        <div class="tiphl">Introduce all parties on day one.</div>
+        <div class="divider"></div>
+        <div class="tipbody">The moment a file opens, send one email to everyone -- buyer, seller, escrow, lender, co-op agent. Set expectations, share contacts, confirm dates. It eliminates a week of confusion before things even start moving.</div>
+      </div>
+      <div class="bottombar"><div class="bottomtag">Transaction Coordination</div></div>
+    </div>
+    <button class="dl-btn" onclick="downloadSlide('slide-3','mytcteam-tip-03-parties')">Download Slide 3</button>
+  </div>
+
+  <!-- Slide 4 -->
+  <div class="slide-wrap">
+    <div class="slide-label">Slide 4 — Tip 03</div>
+    <div class="slide" id="slide-4">
+      <div class="topbar">
+        <div class="brand"><div class="lc1">T</div><div class="lc2">C</div><div class="brandname">myTCteam</div></div>
+        <div class="ct">3 of 5</div>
+      </div>
+      <div class="body-area">
+        <div class="ghostnum">03</div>
+        <div class="tiptag">Tip 03</div>
+        <div class="tiphl">Follow up with the lender early -- not the week before closing.</div>
+        <div class="divider"></div>
+        <div class="tipbody">Most delays happen because nobody nudged the lender until it was too late. Check in weekly once the loan is in process. Ask for a clear-to-close target by the appraisal deadline. Early pressure means fewer fire drills at the end.</div>
+      </div>
+      <div class="bottombar"><div class="bottomtag">Transaction Coordination</div></div>
+    </div>
+    <button class="dl-btn" onclick="downloadSlide('slide-4','mytcteam-tip-04-lender')">Download Slide 4</button>
+  </div>
+
+  <!-- Slide 5 -->
+  <div class="slide-wrap">
+    <div class="slide-label">Slide 5 — Tip 04</div>
+    <div class="slide" id="slide-5">
+      <div class="topbar">
+        <div class="brand"><div class="lc1">T</div><div class="lc2">C</div><div class="brandname">myTCteam</div></div>
+        <div class="ct">4 of 5</div>
+      </div>
+      <div class="body-area">
+        <div class="ghostnum">04</div>
+        <div class="tiptag">Tip 04</div>
+        <div class="tiphl">Confirm closing day details 48 hours out -- with everyone.</div>
+        <div class="divider"></div>
+        <div class="tipbody">Do not assume closing will happen just because it is on the calendar. Two days before: confirm time and location with escrow, verify funds are wired, make sure the final walkthrough is done. Closing day surprises are almost always avoidable.</div>
+      </div>
+      <div class="bottombar"><div class="bottomtag">Transaction Coordination</div></div>
+    </div>
+    <button class="dl-btn" onclick="downloadSlide('slide-5','mytcteam-tip-05-closing-day')">Download Slide 5</button>
+  </div>
+
+  <!-- Slide 6 -->
+  <div class="slide-wrap">
+    <div class="slide-label">Slide 6 — Tip 05</div>
+    <div class="slide" id="slide-6">
+      <div class="topbar">
+        <div class="brand"><div class="lc1">T</div><div class="lc2">C</div><div class="brandname">myTCteam</div></div>
+        <div class="ct">5 of 5</div>
+      </div>
+      <div class="body-area">
+        <div class="ghostnum">05</div>
+        <div class="tiptag">Tip 05</div>
+        <div class="tiphl">Document everything -- even when a deal falls through.</div>
+        <div class="divider"></div>
+        <div class="tipbody">Every email, amendment, and update should be logged and stored. A clean file protects you if a dispute comes up later. When you are running multiple deals at once, organized records are the only thing keeping you from dropping the ball.</div>
+      </div>
+      <div class="bottombar"><div class="bottomtag">Transaction Coordination</div></div>
+    </div>
+    <button class="dl-btn" onclick="downloadSlide('slide-6','mytcteam-tip-06-documentation')">Download Slide 6</button>
+  </div>
+
+  <!-- Slide 7: CTA -->
+  <div class="slide-wrap">
+    <div class="slide-label">Slide 7 — CTA</div>
+    <div class="slide" id="slide-7">
+      <div class="accentbar"></div>
+      <div class="topbar">
+        <div class="brand"><div class="lc1">T</div><div class="lc2">C</div><div class="brandname">myTCteam</div></div>
+      </div>
+      <div class="body-area" style="justify-content:flex-end;padding-bottom:36px">
+        <div class="tiptag">Want us to handle all of this?</div>
+        <div class="tiphl" style="font-size:26px">We do every one of these steps on every deal you run.</div>
+        <div style="font-size:13px;color:#64748b;line-height:1.65;margin-bottom:24px;margin-top:4px">Contract to close, fully managed. No chasing, no missed deadlines.</div>
+        <div style="display:inline-block;background:#0f172a;color:#fff;font-weight:700;font-size:13px;padding:12px 22px;border-radius:8px">mytcteam.online</div>
+      </div>
+    </div>
+    <button class="dl-btn" onclick="downloadSlide('slide-7','mytcteam-tip-07-cta')">Download Slide 7</button>
+  </div>
+
+</div>
+
+<script>
+async function downloadSlide(id, filename) {
+  const el = document.getElementById(id);
+  const canvas = await html2canvas(el, { scale: 3, useCORS: true, backgroundColor: '#ffffff' });
+  const link = document.createElement('a');
+  link.download = filename + '.png';
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+}
+
+async function downloadAll() {
+  const status = document.getElementById('status');
+  status.style.display = 'block';
+  const slides = [
+    ['slide-1','mytcteam-tip-01-cover'],
+    ['slide-2','mytcteam-tip-02-deadlines'],
+    ['slide-3','mytcteam-tip-03-parties'],
+    ['slide-4','mytcteam-tip-04-lender'],
+    ['slide-5','mytcteam-tip-05-closing-day'],
+    ['slide-6','mytcteam-tip-06-documentation'],
+    ['slide-7','mytcteam-tip-07-cta'],
+  ];
+  for (let i = 0; i < slides.length; i++) {
+    status.textContent = 'Generating slide ' + (i+1) + ' of ' + slides.length + '...';
+    await downloadSlide(slides[i][0], slides[i][1]);
+    await new Promise(r => setTimeout(r, 600));
+  }
+  status.textContent = 'Done! All 7 slides downloaded.';
+}
+</script>
+</body>
+</html>

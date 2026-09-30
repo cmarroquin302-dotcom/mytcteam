@@ -8,7 +8,7 @@ const FROM = "myTCteam <info@mytcteam.online>";
 const REPLY_TO = process.env.ADMIN_EMAIL || "info@mytcteam.online";
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://mytcteam.vercel.app";
 
-// --- Shared layout ---
+// ─── Shared layout ────────────────────────────────────────────────────────────
 
 function emailLayout(title: string, body: string) {
   return `<!DOCTYPE html>
@@ -51,7 +51,139 @@ function emailLayout(title: string, body: string) {
 </html>`;
 }
 
-// --- Email senders ---
+// ─── Email senders ─────────────────────────────────────────────────────────────
+
+export async function sendNewMessageEmail({
+  to,
+  toName,
+  fromName,
+  propertyAddress,
+  messagePreview,
+  dealId,
+  isAdmin,
+}: {
+  to: string;
+  toName: string;
+  fromName: string;
+  propertyAddress: string;
+  messagePreview: string;
+  dealId: string;
+  isAdmin: boolean;
+}) {
+  const dealUrl = isAdmin
+    ? `${BASE_URL}/admin/deals/${dealId}?tab=messages`
+    : `${BASE_URL}/dashboard/deals/${dealId}?tab=messages`;
+
+  const body = `
+    <h2>New message from ${fromName}</h2>
+    <p>Hi ${toName}, you have a new message regarding your transaction.</p>
+    <div class="detail-box">
+      <strong>${propertyAddress}</strong><br/>
+      <span style="color:#64748b;">${messagePreview.slice(0, 200)}${messagePreview.length > 200 ? "…" : ""}</span>
+    </div>
+    <a href="${dealUrl}" class="btn">View Message</a>
+    <div class="divider"></div>
+    <p style="font-size:13px;color:#94a3b8;">You're receiving this because you have an active deal on myTCteam.</p>
+  `;
+
+  if (!resend) return null;
+  return resend.emails.send({
+    from: FROM,
+    replyTo: REPLY_TO,
+    to,
+    subject: `New message: ${propertyAddress}`,
+    html: emailLayout("New message", body),
+  });
+}
+
+export async function sendDocumentUploadedEmail({
+  to,
+  toName,
+  propertyAddress,
+  documentName,
+  uploadedBy,
+  dealId,
+}: {
+  to: string;
+  toName: string;
+  propertyAddress: string;
+  documentName: string;
+  uploadedBy: string;
+  dealId: string;
+}) {
+  const dealUrl = `${BASE_URL}/dashboard/deals/${dealId}?tab=documents`;
+
+  const body = `
+    <h2>New document uploaded</h2>
+    <p>Hi ${toName}, a new document has been added to your transaction.</p>
+    <div class="detail-box">
+      <strong>${propertyAddress}</strong><br/>
+      📄 ${documentName}<br/>
+      <span style="color:#64748b;font-size:13px;">Uploaded by ${uploadedBy}</span>
+    </div>
+    <a href="${dealUrl}" class="btn">View Documents</a>
+    <div class="divider"></div>
+    <p style="font-size:13px;color:#94a3b8;">You're receiving this because you have an active deal on myTCteam.</p>
+  `;
+
+  if (!resend) return null;
+  return resend.emails.send({
+    from: FROM,
+    replyTo: REPLY_TO,
+    to,
+    subject: `New document: ${propertyAddress}`,
+    html: emailLayout("New document uploaded", body),
+  });
+}
+
+export async function sendDealStageChangedEmail({
+  to,
+  toName,
+  propertyAddress,
+  newStage,
+  dealId,
+  note,
+}: {
+  to: string;
+  toName: string;
+  propertyAddress: string;
+  newStage: string;
+  dealId: string;
+  note?: string;
+}) {
+  const dealUrl = `${BASE_URL}/dashboard/deals/${dealId}`;
+
+  const stageLabels: Record<string, { label: string; emoji: string }> = {
+    pending:        { label: "Pending",         emoji: "🕐" },
+    active:         { label: "Active",           emoji: "✅" },
+    closing:        { label: "Closing",          emoji: "🏁" },
+    closed:         { label: "Closed",           emoji: "🎉" },
+    fallen_through: { label: "Fallen Through",   emoji: "❌" },
+  };
+  const { label, emoji } = stageLabels[newStage] || { label: newStage, emoji: "📋" };
+
+  const body = `
+    <h2>${emoji} Transaction status update</h2>
+    <p>Hi ${toName}, your transaction status has been updated.</p>
+    <div class="detail-box">
+      <strong>${propertyAddress}</strong><br/>
+      New status: <strong>${label}</strong>
+      ${note ? `<br/><span style="color:#64748b;font-size:13px;margin-top:4px;display:block;">${note}</span>` : ""}
+    </div>
+    <a href="${dealUrl}" class="btn">View Transaction</a>
+    <div class="divider"></div>
+    <p style="font-size:13px;color:#94a3b8;">You're receiving this because you have an active deal on myTCteam.</p>
+  `;
+
+  if (!resend) return null;
+  return resend.emails.send({
+    from: FROM,
+    replyTo: REPLY_TO,
+    to,
+    subject: `${emoji} Transaction update: ${propertyAddress}`,
+    html: emailLayout("Transaction update", body),
+  });
+}
 
 export async function sendSalesInquiryEmail({
   name,
@@ -94,138 +226,6 @@ export async function sendSalesInquiryEmail({
   });
 }
 
-export async function sendNewMessageEmail({
-  to,
-  toName,
-  fromName,
-  propertyAddress,
-  messagePreview,
-  dealId,
-  isAdmin,
-}: {
-  to: string;
-  toName: string;
-  fromName: string;
-  propertyAddress: string;
-  messagePreview: string;
-  dealId: string;
-  isAdmin: boolean;
-}) {
-  const dealUrl = isAdmin
-    ? `${BASE_URL}/admin/deals/${dealId}?tab=messages`
-    : `${BASE_URL}/dashboard/deals/${dealId}?tab=messages`;
-
-  const body = `
-    <h2>New message from ${fromName}</h2>
-    <p>Hi ${toName}, you have a new message regarding your transaction.</p>
-    <div class="detail-box">
-      <strong>${propertyAddress}</strong><br/>
-      <span style="color:#64748b;">${messagePreview.slice(0, 200)}${messagePreview.length > 200 ? "..." : ""}</span>
-    </div>
-    <a href="${dealUrl}" class="btn">View Message</a>
-    <div class="divider"></div>
-    <p style="font-size:13px;color:#94a3b8;">You're receiving this because you have an active deal on myTCteam.</p>
-  `;
-
-  if (!resend) return null;
-  return resend.emails.send({
-    from: FROM,
-    replyTo: REPLY_TO,
-    to,
-    subject: `New message: ${propertyAddress}`,
-    html: emailLayout("New message", body),
-  });
-}
-
-export async function sendDocumentUploadedEmail({
-  to,
-  toName,
-  propertyAddress,
-  documentName,
-  uploadedBy,
-  dealId,
-}: {
-  to: string;
-  toName: string;
-  propertyAddress: string;
-  documentName: string;
-  uploadedBy: string;
-  dealId: string;
-}) {
-  const dealUrl = `${BASE_URL}/dashboard/deals/${dealId}?tab=documents`;
-
-  const body = `
-    <h2>New document uploaded</h2>
-    <p>Hi ${toName}, a new document has been added to your transaction.</p>
-    <div class="detail-box">
-      <strong>${propertyAddress}</strong><br/>
-      ${documentName}<br/>
-      <span style="color:#64748b;font-size:13px;">Uploaded by ${uploadedBy}</span>
-    </div>
-    <a href="${dealUrl}" class="btn">View Documents</a>
-    <div class="divider"></div>
-    <p style="font-size:13px;color:#94a3b8;">You're receiving this because you have an active deal on myTCteam.</p>
-  `;
-
-  if (!resend) return null;
-  return resend.emails.send({
-    from: FROM,
-    replyTo: REPLY_TO,
-    to,
-    subject: `New document: ${propertyAddress}`,
-    html: emailLayout("New document uploaded", body),
-  });
-}
-
-export async function sendDealStageChangedEmail({
-  to,
-  toName,
-  propertyAddress,
-  newStage,
-  dealId,
-  note,
-}: {
-  to: string;
-  toName: string;
-  propertyAddress: string;
-  newStage: string;
-  dealId: string;
-  note?: string;
-}) {
-  const dealUrl = `${BASE_URL}/dashboard/deals/${dealId}`;
-
-  const stageLabels: Record<string, { label: string; emoji: string }> = {
-    pending:        { label: "Pending",         emoji: "Clock" },
-    active:         { label: "Active",           emoji: "Check" },
-    closing:        { label: "Closing",          emoji: "Flag" },
-    closed:         { label: "Closed",           emoji: "Star" },
-    fallen_through: { label: "Fallen Through",   emoji: "X" },
-  };
-  const { label, emoji } = stageLabels[newStage] || { label: newStage, emoji: "Doc" };
-
-  const body = `
-    <h2>Transaction status update</h2>
-    <p>Hi ${toName}, your transaction status has been updated.</p>
-    <div class="detail-box">
-      <strong>${propertyAddress}</strong><br/>
-      New status: <strong>${label}</strong>
-      ${note ? `<br/><span style="color:#64748b;font-size:13px;margin-top:4px;display:block;">${note}</span>` : ""}
-    </div>
-    <a href="${dealUrl}" class="btn">View Transaction</a>
-    <div class="divider"></div>
-    <p style="font-size:13px;color:#94a3b8;">You're receiving this because you have an active deal on myTCteam.</p>
-  `;
-
-  if (!resend) return null;
-  return resend.emails.send({
-    from: FROM,
-    replyTo: REPLY_TO,
-    to,
-    subject: `Transaction update: ${propertyAddress}`,
-    html: emailLayout("Transaction update", body),
-  });
-}
-
 export async function sendDeadlineReminderEmail({
   to,
   deadlines,
@@ -252,7 +252,7 @@ export async function sendDeadlineReminderEmail({
   `).join("");
 
   const body = `
-    <h2>Upcoming deadlines</h2>
+    <h2>⏰ Upcoming deadlines</h2>
     <p>You have ${deadlines.length} deadline${deadlines.length !== 1 ? "s" : ""} coming up in the next 3 days.</p>
     <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;border:1px solid #e2e8f0;border-radius:8px;overflow:hidden;margin-bottom:16px;">
       <thead>
@@ -274,48 +274,7 @@ export async function sendDeadlineReminderEmail({
     from: FROM,
     replyTo: REPLY_TO,
     to,
-    subject: `${deadlines.length} deadline${deadlines.length !== 1 ? "s" : ""} coming up`,
+    subject: `⏰ ${deadlines.length} deadline${deadlines.length !== 1 ? "s" : ""} coming up`,
     html: emailLayout("Upcoming deadlines", body),
   });
-}
-
-export async function sendSalesInquiryEmail({
-    name,
-    email,
-    phone,
-    volume,
-    message,
-}: {
-    name: string;
-    email: string;
-    phone: string;
-    volume: string;
-    message: string;
-}) {
-    const adminEmail = process.env.ADMIN_EMAIL;
-    if (!resend || !adminEmail) return null;
-
-    const body = `
-        <h2>New sales inquiry</h2>
-            <p>Someone filled out the contact form on the pricing page.</p>
-                <div class="detail-box">
-                      <strong>${name}</strong><br/>
-                            <a href="mailto:${email}" style="color:#6366f1;">${email}</a><br/>
-                                  ${phone ? `Phone: ${phone}<br/>` : ""}
-                                        Annual deal volume: <strong>${volume}</strong>
-                                            </div>
-                                                <div class="detail-box">
-                                                      <span style="color:#64748b;font-size:13px;">${message}</span>
-                                                          </div>
-                                                              <div class="divider"></div>
-                                                                  <p style="font-size:13px;color:#94a3b8;">Sent from the pricing page contact form.</p>
-                                                                    `;
-
-    return resend.emails.send({
-          from: FROM,
-          replyTo: email,
-          to: adminEmail,
-          subject: `Sales inquiry from ${name} (${volume}/yr)`,
-          html: emailLayout("New sales inquiry", body),
-    });
 }

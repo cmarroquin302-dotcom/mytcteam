@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>myTCteam — Instagram Posts</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+  * { box-sizing: border-box; }
+  body { background: #f1f5f9; font-family: -apple-system, Helvetica, Arial, sans-serif; margin: 0; padding: 32px; }
+  h2 { color: #0f172a; margin-bottom: 6px; font-size: 22px; }
+  p { color: #64748b; font-size: 14px; margin-bottom: 24px; }
+  .btn { display: inline-block; background: #0f172a; color: #fff; font-weight: 700; font-size: 14px; padding: 14px 28px; border-radius: 10px; cursor: pointer; border: none; margin-bottom: 32px; }
+  .btn:hover { background: #1e293b; }
+  .status { font-size: 13px; color: #6366f1; font-weight: 600; margin-bottom: 24px; display: none; }
+  .grid { display: flex; flex-direction: column; gap: 40px; }
+  .slide-wrap { position: relative; display: inline-block; }
+  .slide-label { font-size: 11px; font-weight: 600; color: #94a3b8; margin-bottom: 6px; letter-spacing: 1px; text-transform: uppercase; }
+  .dl-btn { display: block; margin-top: 8px; background: #6366f1; color: #fff; font-size: 12px; font-weight: 700; padding: 10px 0; border-radius: 7px; border: none; cursor: pointer; width: 480px; }
+  .dl-btn:hover { background: #4f46e5; }
+
+  /* ===== POST STYLES (480x480 square) ===== */
+  .post {
+    width: 480px;
+    height: 480px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* ── Post 1: Dark gradient "stat shock" style ── */
+  .post-1 {
+    background: linear-gradient(145deg, #0f172a 0%, #1e1b4b 60%, #312e81 100%);
+  }
+  .post-1 .topbar {
+    padding: 18px 24px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .brand { display: flex; align-items: center; gap: 8px; }
+  .lc1 { width: 22px; height: 22px; border-radius: 50%; background: #6366f1; display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 900; color: #fff; }
+  .lc2 { width: 22px; height: 22px; border-radius: 50%; background: #3730a3; display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 900; color: #fff; margin-left: -8px; }
+  .brandname-light { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.5); letter-spacing: 0.5px; }
+  .post-1 .body {
+    flex: 1;
+    padding: 20px 32px 28px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .eyebrow {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #a5b4fc;
+    margin-bottom: 16px;
+  }
+  .big-stat {
+    font-size: 88px;
+    font-weight: 900;
+    color: #fff;
+    line-height: 1;
+    letter-spacing: -4px;
+    margin-bottom: 6px;
+  }
+  .big-stat span { color: #818cf8; }
+  .stat-label {
+    font-size: 20px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.9);
+    line-height: 1.35;
+    margin-bottom: 20px;
+  }
+  .stat-sub {
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.65;
+    border-left: 2px solid #6366f1;
+    padding-left: 12px;
+  }
+  .post-1 .footer {
+    padding: 12px 24px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .hashtag { font-size: 10px; color: #818cf8; font-weight: 600; letter-spacing: 1px; }
+  .ig-handle { font-size: 10px; color: rgba(255,255,255,0.3); font-weight: 600; letter-spacing: 1px; }
+
+  /* ── Post 2: White card "value list" style ── */
+  .post-2 {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+  }
+  .post-2 .accentbar {
+    height: 5px;
+    background: linear-gradient(90deg, #6366f1, #3730a3);
+    flex-shrink: 0;
+  }
+  .post-2 .topbar {
+    padding: 16px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #f1f5f9;
+    flex-shrink: 0;
+  }
+  .tag-pill {
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #6366f1;
+    background: #eef2ff;
+    padding: 4px 10px;
+    border-radius: 99px;
+  }
+  .post-2 .body {
+    flex: 1;
+    padding: 22px 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .hook {
+    font-size: 20px;
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1.3;
+    margin-bottom: 18px;
+  }
+  .list-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 11px;
+  }
+  .check {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #eef2ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    color: #6366f1;
+    font-weight: 900;
+  }
+  .list-text {
+    font-size: 13px;
+    color: #334155;
+    line-height: 1.55;
+  }
+  .list-text strong { color: #0f172a; }
+  .post-2 .footer {
+    padding: 12px 28px;
+    border-top: 1px solid #f1f5f9;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-tag {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #cbd5e1;
+  }
+
+  /* ── Post 3: Split-color "question + answer" style ── */
+  .post-3 {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+  }
+  .post-3 .top-half {
+    background: #0f172a;
+    padding: 28px 32px 22px;
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 50%;
+    position: relative;
+    overflow: hidden;
+  }
+  .ghost-q {
+    position: absolute;
+    bottom: -20px;
+    right: 10px;
+    font-size: 130px;
+    font-weight: 900;
+    color: rgba(99,102,241,0.12);
+    line-height: 1;
+    letter-spacing: -8px;
+    pointer-events: none;
+  }
+  .q-label {
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #818cf8;
+    margin-bottom: 14px;
+  }
+  .question {
+    font-size: 21px;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.3;
+  }
+  .post-3 .bottom-half {
+    padding: 22px 32px 18px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+  .a-label {
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #6366f1;
+    margin-bottom: 12px;
+  }
+  .answer {
+    font-size: 13.5px;
+    color: #334155;
+    line-height: 1.7;
+    flex: 1;
+  }
+  .answer strong { color: #0f172a; font-weight: 700; }
+  .post-3 .footer {
+    padding: 10px 32px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .dot-brand {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: #6366f1; }
+  .dot-name { font-size: 10px; font-weight: 700; color: #94a3b8; letter-spacing: 1px; text-transform: uppercase; }
+</style>
+</head>
+<body>
+
+<h2>myTCteam — Instagram Posts</h2>
+<p>Click "Download All" to save all 3 posts as PNG files, or download individually.</p>
+<button class="btn" onclick="downloadAll()">⬇ Download All 3 Posts</button>
+<div class="status" id="status">Generating images…</div>
+
+<div class="grid">
+
+  <!-- ─── Post 1: Stat Shock ─── -->
+  <div class="slide-wrap">
+    <div class="slide-label">Post 1 — Stat Shock</div>
+    <div class="post post-1" id="post-1">
+      <div class="topbar">
+        <div class="brand">
+          <div class="lc1">T</div>
+          <div class="lc2">C</div>
+          <div class="brandname-light">myTCteam</div>
+        </div>
+        <div class="ig-handle" style="color:rgba(255,255,255,0.3);font-size:10px;font-weight:600">@mytcteam.online</div>
+      </div>
+      <div class="body">
+        <div class="eyebrow">Did you know?</div>
+        <div class="big-stat">40<span>+</span></div>
+        <div class="stat-label">hours saved per closing<br>when a TC is on the file.</div>
+        <div class="stat-sub">
+          From contract to close, a Transaction Coordinator handles deadlines, chases signatures, coordinates parties, and keeps everything on track — so you stay in front of clients, not buried in paperwork.
+        </div>
+      </div>
+      <div class="footer">
+        <div class="hashtag">#TransactionCoordinator</div>
+        <div class="ig-handle">mytcteam.online</div>
+      </div>
+    </div>
+    <button class="dl-btn" onclick="downloadPost('post-1','mytcteam-post-01-stat')">⬇ Download Post 1</button>
+  </div>
+
+  <!-- ─── Post 2: Value List ─── -->
+  <div class="slide-wrap">
+    <div class="slide-label">Post 2 — What We Handle</div>
+    <div class="post post-2" id="post-2">
+      <div class="accentbar"></div>
+      <div class="topbar">
+        <div class="brand">
+          <div class="lc1">T</div>
+          <div class="lc2">C</div>
+          <div class="brandname" style="font-size:11px;font-weight:700;color:#94a3b8;margin-left:8px;">myTCteam</div>
+        </div>
+        <div class="tag-pill">Transaction Coordination</div>
+      </div>
+      <div class="body">
+        <div class="hook">Your deal. Our checklist.<br>Every. Single. Step.</div>
+        <div class="list-item">
+          <div class="check">✓</div>
+          <div class="list-text"><strong>Deadlines tracked</strong> — inspection, EMD, appraisal, financing, closing</div>
+        </div>
+        <div class="list-item">
+          <div class="check">✓</div>
+          <div class="list-text"><strong>Documents collected</strong> — disclosures, addenda, HOA, title, everything</div>
+        </div>
+        <div class="list-item">
+          <div class="check">✓</div>
+          <div class="list-text"><strong>All parties coordinated</strong> — escrow, lender, co-op agent, inspectors</div>
+        </div>
+        <div class="list-item">
+          <div class="check">✓</div>
+          <div class="list-text"><strong>You stay updated</strong> — real-time status, no chasing, no guessing</div>
+        </div>
+      </div>
+      <div class="footer">
+        <div class="footer-tag">mytcteam.online</div>
+        <div class="footer-tag">#TClife</div>
+      </div>
+    </div>
+    <button class="dl-btn" onclick="downloadPost('post-2','mytcteam-post-02-checklist')">⬇ Download Post 2</button>
+  </div>
+
+  <!-- ─── Post 3: Q&A ─── -->
+  <div class="slide-wrap">
+    <div class="slide-label">Post 3 — Q&amp;A</div>
+    <div class="post post-3" id="post-3">
+      <div class="top-half">
+        <div class="ghost-q">?</div>
+        <div class="q-label">The question agents ask us</div>
+        <div class="question">"When is the right time<br>to bring in a TC?"</div>
+      </div>
+      <div class="bottom-half">
+        <div class="a-label">The answer</div>
+        <div class="answer">
+          The moment you <strong>get a signed contract</strong>.<br><br>
+          Not after you're overwhelmed. Not when something falls through. <strong>Day one.</strong> That's when a TC adds the most value — setting up the file, notifying all parties, and locking in every deadline before anything slips.
+        </div>
+      </div>
+      <div class="footer">
+        <div class="dot-brand">
+          <div class="dot"></div>
+          <div class="dot-name">myTCteam</div>
+        </div>
+        <div class="footer-tag">mytcteam.online</div>
+      </div>
+    </div>
+    <button class="dl-btn" onclick="downloadPost('post-3','mytcteam-post-03-qa')">⬇ Download Post 3</button>
+  </div>
+
+</div>
+
+<script>
+async function downloadPost(id, filename) {
+  const el = document.getElementById(id);
+  const canvas = await html2canvas(el, { scale: 2, useCORS: true, backgroundColor: null });
+  const a = document.createElement('a');
+  a.href = canvas.toDataURL('image/png');
+  a.download = filename + '.png';
+  a.click();
+}
+
+async function downloadAll() {
+  const status = document.getElementById('status');
+  status.style.display = 'block';
+  status.textContent = 'Generating Post 1…';
+  await downloadPost('post-1', 'mytcteam-post-01-stat');
+  await new Promise(r => setTimeout(r, 600));
+  status.textContent = 'Generating Post 2…';
+  await downloadPost('post-2', 'mytcteam-post-02-checklist');
+  await new Promise(r => setTimeout(r, 600));
+  status.textContent = 'Generating Post 3…';
+  await downloadPost('post-3', 'mytcteam-post-03-qa');
+  await new Promise(r => setTimeout(r, 400));
+  status.textContent = '✓ All 3 posts downloaded!';
+  setTimeout(() => { status.style.display = 'none'; }, 3000);
+}
+</script>
+</body>
+</html>

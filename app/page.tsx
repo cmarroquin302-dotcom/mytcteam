@@ -1,5 +1,7 @@
+"use client";
 import Link from "next/link";
-import { CheckCircle, Clock, FileCheck, Users, ArrowRight, Shield, Calendar, Star, Bell, LayoutDashboard, MessageSquare } from "lucide-react";
+import { useRef, useState } from "react";
+import { CheckCircle, Clock, FileCheck, Users, ArrowRight, Shield, Calendar, Star, Bell, LayoutDashboard, MessageSquare, Play } from "lucide-react";
 import { PublicNav } from "@/components/layout/public-nav";
 import { Footer } from "@/components/layout/footer";
 
@@ -40,6 +42,16 @@ const steps = [
 ];
 
 export default function HomePage() {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [playing, setPlaying] = useState(false);
+
+  function handlePlay() {
+    if (videoRef.current) {
+      videoRef.current.play();
+      setPlaying(true);
+    }
+  }
+
   return (
     <div className="flex flex-col min-h-screen">
       <PublicNav />
@@ -63,6 +75,43 @@ export default function HomePage() {
             <Link href="/how-it-works" className="btn-ghost text-white hover:bg-white/10 px-8 py-3 text-base">
               See how it works
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Promo video */}
+      <section className="bg-brand-950 py-16 px-4">
+        <div className="max-w-4xl mx-auto">
+          <p className="text-center text-brand-400 text-xs font-semibold uppercase tracking-widest mb-6">
+            See it in action
+          </p>
+          <div className="relative rounded-2xl overflow-hidden shadow-2xl shadow-black/60 group"
+               style={{ aspectRatio: "16/9" }}>
+            <video
+              ref={videoRef}
+              src="/promo.mp4"
+              className="w-full h-full object-cover"
+              controls
+              playsInline
+              preload="metadata"
+              onPlay={() => setPlaying(true)}
+              onPause={() => setPlaying(false)}
+              onEnded={() => setPlaying(false)}
+            />
+            {/* Custom play overlay — hides once playing */}
+            {!playing && (
+              <button
+                onClick={handlePlay}
+                className="absolute inset-0 flex flex-col items-center justify-center bg-black/50 hover:bg-black/40 transition-colors"
+              >
+                <div className="w-20 h-20 rounded-full bg-white/90 hover:bg-white flex items-center justify-center shadow-xl transition-transform group-hover:scale-105">
+                  <Play size={32} className="text-brand-700 ml-1" fill="currentColor" />
+                </div>
+                <span className="mt-4 text-white text-sm font-medium opacity-80">
+                  Watch the 30-second overview
+                </span>
+              </button>
+            )}
           </div>
         </div>
       </section>

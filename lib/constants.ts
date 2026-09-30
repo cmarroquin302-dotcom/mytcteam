@@ -16,6 +16,7 @@ export const DEFAULT_CHECKLIST: Record<DealStage, { label: string; admin_only: b
   ],
   // UNDER CONTRACT – OPTION PERIOD + POST-OPTION
   active_tracking: [
+    // Option Period
     { label: "Earnest money delivered & receipt confirmed", admin_only: false },
     { label: "Option fee delivered & receipt confirmed", admin_only: false },
     { label: "Inspection scheduled", admin_only: false },
@@ -24,6 +25,7 @@ export const DEFAULT_CHECKLIST: Record<DealStage, { label: string; admin_only: b
     { label: "Option period released or contract terminated", admin_only: false },
     { label: "Survey ordered", admin_only: false },
     { label: "HOA documents requested (if applicable)", admin_only: false },
+    // Post-Option
     { label: "Title commitment ordered", admin_only: false },
     { label: "Title commitment received & reviewed", admin_only: true },
     { label: "Title issues flagged (if any)", admin_only: true },

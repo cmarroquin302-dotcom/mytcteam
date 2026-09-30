@@ -58,8 +58,8 @@ const phases = [
 
 const faqs = [
   {
-    q: "Who is my transaction coordinator?",
-    a: "When you open your first deal, you're assigned a dedicated myTCteam Transaction Coordinator. You'll see their name in your client portal and they'll introduce themselves when your file is opened. They're your single point of contact for every deal you run with us.",
+    q: "Who is my transaction manager?",
+    a: "When you open your first deal, you're assigned a dedicated myTCteam Transaction Manager. You'll see their name in your client portal and they'll introduce themselves when your file is opened. They're your single point of contact for every deal you run with us.",
   },
   {
     q: "Do I need to be present for any of this?",
@@ -67,7 +67,7 @@ const faqs = [
   },
   {
     q: "What if the deal falls through?",
-    a: "Real estate doesn't always go as planned — and we understand that better than anyone. If a transaction doesn't make it to the finish line, we take care of closing the file properly: logging what happened, communicating with all parties, and archiving everything so your records stay clean and complete. The retainer covers the coordination work already completed on your behalf, and no closing balance is owed. Whenever you're ready to open a new file, we'll be right here.",
+    a: "We flag the file as 'Fallen Through,' log the reason, and archive it. The $75 retainer is non-refundable as we've already opened and worked the file. No closing balance is owed.",
   },
   {
     q: "Can I see what's happening on my deal at any time?",
@@ -106,7 +106,7 @@ export default function HowItWorksPage() {
           </div>
           <div>
             <div className="text-xs font-semibold text-brand-400 uppercase tracking-wide mb-2">Your team, your deal</div>
-            <h2 className="text-2xl font-bold mb-3">You get a dedicated transaction coordinator</h2>
+            <h2 className="text-2xl font-bold mb-3">You get a dedicated transaction manager</h2>
             <p className="text-brand-200 leading-relaxed mb-4">
               When you open your first deal, you&apos;re assigned a dedicated myTCteam Transaction Coordinator. This is your person &mdash; they own your file from contract to close, know your deal inside and out, and are on top of every deadline and communication so you don&apos;t have to be.
             </p>
